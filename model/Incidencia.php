@@ -1,161 +1,140 @@
 <?php
 
-class Incidencia
-{
+class Incidencia {
     private $conexion;
-
     private $idIncidencia, $descripcionBreve, $descripcionDetallada, $fecha, $prioridad, $estado, $categoria, $idCliente, $idEmpleado;
 
     /**
      * Incidencia constructor.
      * @param $conexion
      */
-    public function __construct($conexion)
-    {
+    public function __construct($conexion) {
         $this->conexion = $conexion;
     }
 
     /**
      * @return mixed
      */
-    public function getIdIncidencia()
-    {
+    public function getIdIncidencia() {
         return $this->idIncidencia;
     }
 
     /**
      * @param mixed $idIncidencia
      */
-    public function setIdIncidencia($idIncidencia)
-    {
+    public function setIdIncidencia($idIncidencia) {
         $this->idIncidencia = $idIncidencia;
     }
 
     /**
      * @return mixed
      */
-    public function getDescripcionBreve()
-    {
+    public function getDescripcionBreve() {
         return $this->descripcionBreve;
     }
 
     /**
      * @param mixed $descripcionBreve
      */
-    public function setDescripcionBreve($descripcionBreve)
-    {
+    public function setDescripcionBreve($descripcionBreve) {
         $this->descripcionBreve = $descripcionBreve;
     }
 
     /**
      * @return mixed
      */
-    public function getDescripcionDetallada()
-    {
+    public function getDescripcionDetallada() {
         return $this->descripcionDetallada;
     }
 
     /**
      * @param mixed $descripcionDetallada
      */
-    public function setDescripcionDetallada($descripcionDetallada)
-    {
+    public function setDescripcionDetallada($descripcionDetallada) {
         $this->descripcionDetallada = $descripcionDetallada;
     }
 
     /**
      * @return mixed
      */
-    public function getFecha()
-    {
+    public function getFecha() {
         return $this->fecha;
     }
 
     /**
      * @param mixed $fecha
      */
-    public function setFecha($fecha)
-    {
+    public function setFecha($fecha) {
         $this->fecha = $fecha;
     }
 
     /**
      * @return mixed
      */
-    public function getPrioridad()
-    {
+    public function getPrioridad() {
         return $this->prioridad;
     }
 
     /**
      * @param mixed $prioridad
      */
-    public function setPrioridad($prioridad)
-    {
+    public function setPrioridad($prioridad) {
         $this->prioridad = $prioridad;
     }
 
     /**
      * @return mixed
      */
-    public function getEstado()
-    {
+    public function getEstado() {
         return $this->estado;
     }
 
     /**
      * @param mixed $estado
      */
-    public function setEstado($estado)
-    {
+    public function setEstado($estado) {
         $this->estado = $estado;
     }
 
     /**
      * @return mixed
      */
-    public function getCategoria()
-    {
+    public function getCategoria() {
         return $this->categoria;
     }
 
     /**
      * @param mixed $categoria
      */
-    public function setCategoria($categoria)
-    {
+    public function setCategoria($categoria) {
         $this->categoria = $categoria;
     }
 
     /**
      * @return mixed
      */
-    public function getIdCliente()
-    {
+    public function getIdCliente() {
         return $this->idCliente;
     }
 
     /**
      * @param mixed $idCliente
      */
-    public function setIdCliente($idCliente)
-    {
+    public function setIdCliente($idCliente) {
         $this->idCliente = $idCliente;
     }
 
     /**
      * @return mixed
      */
-    public function getIdEmpleado()
-    {
+    public function getIdEmpleado() {
         return $this->idEmpleado;
     }
 
     /**
      * @param mixed $idEmpleado
      */
-    public function setIdEmpleado($idEmpleado)
-    {
+    public function setIdEmpleado($idEmpleado) {
         $this->idEmpleado = $idEmpleado;
     }
 }

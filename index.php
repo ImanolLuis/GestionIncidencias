@@ -30,7 +30,12 @@ if(isset($_SESSION["login"])) {
 } else {
     require_once 'controller/EmpleadoController.php';
     $controllerObj=new EmpleadoController();
-    $controllerObj->run("login");
+    if(isset($_POST["usuario"])) {
+        $controllerObj->run("login");
+    } else {
+        $controllerObj->run("");
+    }
+
 }
 
 function lanzarAccion($controllerObj) {
