@@ -1,0 +1,49 @@
+{% extends "layout.twig" %}
+
+{% block titulo %}
+    Inicio
+{% endblock %}
+
+{% block estilos %}
+    <link rel="stylesheet" href="assets/css/index.css" />
+{% endblock %}
+
+{% block cuerpo %}
+    {% include "navbar.twig" %}
+    <main role="main" class="container">
+        <h3 class="mt-4 mb-3">Listado de incidencias</h3>
+        {% if incidencias|length > 0 %}
+        <div class="my-3 p-3 bg-white shadow-sm table-responsive">
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                <tr>
+                    <th scope="col">Descripci&oacute;n</th>
+                    <th scope="col" class="d-none d-md-table-cell">Cliente</th>
+                    <th scope="col" class="d-none d-md-table-cell">Prioridad</th>
+                    <th scope="col" class="d-none d-md-table-cell">Estado</th>
+                    <th scope="col" class="d-none d-md-table-cell">Categor&iacute;a</th>
+                    <th scope="col" class="d-none d-md-table-cell">T&eacute;cnico</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for incidencia in incidencias %}
+                <tr>
+                    <td scope="row">{{ incidencia.descripcionBreve }}</td>
+                    <td class="d-none d-md-table-cell">{{ incidencia.cliente }}</td>
+                    <td class="d-none d-md-table-cell">{{ incidencia.prioridad }}</td>
+                    <td class="d-none d-md-table-cell">{{ incidencia.estado }}</td>
+                    <td class="d-none d-md-table-cell">{{ incidencia.categoria }}</td>
+                    <td class="d-none d-md-table-cell">{{ incidencia.empleado }}</td>
+                    <td>
+                        <a href="index.php?action=ver&incidencia={{ incidencia.idIncidencia }}" class="btn btn-outline-primary"><i class="fas fa-eye"></i><span class="d-none d-md-inline"> Ver</span></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </main>
+    {% include "footer.twig" %}
+{% endblock %}

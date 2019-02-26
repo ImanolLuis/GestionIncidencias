@@ -1,50 +1,16 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Iniciar sesi&oacute;n &#124; INDUSTECH</title>
-    <link rel="stylesheet" href="../assets/bootstrap-4.3.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../assets/fontawesome-free-5.7.2/css/all.min.css" />
-    <link rel="stylesheet" href="../assets/css/index.css" />
-</head>
-<body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="../index.php">
-                INDUSTECH
-            </a>
+{% extends "layout.twig" %}
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Registrar incidencia</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Estadísticas</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="../index.php?controller=Empleado&action=logout">Cerrar sesión</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% block titulo %}
+    Registrar incidencia
+{% endblock %}
 
+{% block cuerpo %}
+    {% include "navbar.twig" %}
     <main role="main" class="container">
         <h3 class="mt-4 mb-3">Registrar incidencia</h3>
         <div class="my-3 p-3 bg-white shadow-sm">
             <h4 class="border-bottom border-gray pb-2 mb-0">Informaci&oacute;n de la incidencia</h4>
             <form action="index.php?action=insert" method="post" class="needs-validation mt-4" novalidate>
-
                 <div class="mb-3">
                     <label for="descripcionBreve">Descripci&oacute;n breve</label>
                     <input type="text" class="form-control" id="descripcionBreve" name="descripcionBreve" placeholder="Descripci&oacute;n breve" required />
@@ -52,12 +18,10 @@
                         La descripci&oacute;n breve es obligatoria.
                     </div>
                 </div>
-
                 <div class="mb-3">
                     <label for="descripcionDetallada">Descripci&oacute;n detallada</label>
                     <textarea class="form-control" id="descripcionDetallada" name="descripcionDetallada" placeholder="Descripci&oacute;n detallada" rows="5"></textarea>
                 </div>
-
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="prioridad">Prioridad de la incidencia</label>
@@ -82,15 +46,14 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="cliente">Cliente</label>
                         <select class="custom-select d-block w-100" id="cliente" name="cliente" required>
                             <option value="">Elige un cliente</option>
-                            <option value="1">Cliente1</option>
-                            <option value="2">Cliente2</option>
-                            <option value="3">Cliente3</option>
+                            {% for cliente in clientes %}
+                            <option value="{{ cliente.idCliente }}">{{ cliente.nombre }} {{ cliente.apellidos }}</option>
+                            {% endfor %}
                         </select>
                         <div class="invalid-feedback">
                             Por favor, elige un cliente.
@@ -100,20 +63,19 @@
                         <label for="tecnico">T&eacute;cnico asignado</label>
                         <select class="custom-select d-block w-100" id="tecnico" name="tecnico">
                             <option value="">Sin asignar</option>
-                            <option value="1">Tecnico1</option>
-                            <option value="2">Tecnico2</option>
-                            <option value="3">Tecnico3</option>
+                            {% for empleado in empleados %}
+                                <option value="{{ empleado.idEmpleado }}">{{ empleado.nombre }} {{ empleado.apellidos }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                 </div>
-
                 <button class="btn btn-primary btn-md btn-block" type="submit">Registrar incidencia</button>
             </form>
         </div>
     </main>
+    {% include "footer.twig" %}
+{% endblock %}
 
-    <script src="../assets/js/jquery-3.3.1.min.js"></script>
-    <script src="../assets/js/popper.min.js"></script>
-    <script src="../assets/bootstrap-4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% block scripts %}
+    <script src="assets/js/forms.js"></script>
+{% endblock %}

@@ -103,7 +103,41 @@ class Empleado {
             $sentencia->execute($datos);
             $resultado=$sentencia->fetch();
             $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
+    }
 
+    public function selectNombreApellidosEmpleado($idEmpleado) {
+        $datos=array("idEmpleado"=>$idEmpleado);
+        try {
+            $sentencia=$this->conexion->prepare("SELECT nombre, apellidos FROM Empleado WHERE idEmpleado=:idEmpleado");
+            $sentencia->execute($datos);
+            $resultado="";
+            while($fila=$sentencia->fetch())
+            {
+                $resultado=$fila["nombre"]." ".$fila["apellidos"];
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
+    }
+
+    public function selectAllTecnico() {
+        try {
+            $sentencia=$this->conexion->prepare("SELECT * FROM Empleado WHERE esTecnico = 1");
+            $sentencia->execute();
+            $resultado=array();
+            while($fila=$sentencia->fetch())
+            {
+                $resultado[]=$fila;
+            }
+            $this->conexion=null;
             return $resultado;
         } catch (PDOException $e) {
             $this->conexion=null;

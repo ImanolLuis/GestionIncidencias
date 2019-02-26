@@ -17,7 +17,7 @@ if(isset($_SESSION["login"])) {
                 require_once 'controller/AnotacionController.php';
                 $controllerObj=new AnotacionController();
                 break;
-            default:
+            case 'Incidencia':
                 require_once 'controller/IncidenciaController.php';
                 $controllerObj=new IncidenciaController();
         }

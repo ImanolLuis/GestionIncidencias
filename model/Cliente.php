@@ -95,4 +95,38 @@ class Cliente {
     public function setTelefono($telefono) {
         $this->telefono = $telefono;
     }
+
+    public function selectNombreApellidosCliente($idCliente) {
+        $datos=array("idCliente"=>$idCliente);
+        try {
+            $sentencia=$this->conexion->prepare("SELECT nombre, apellidos FROM Cliente WHERE idCliente=:idCliente");
+            $sentencia->execute($datos);
+            while($fila=$sentencia->fetch())
+            {
+                $resultado=$fila["nombre"]." ".$fila["apellidos"];
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
+    }
+
+    public function selectAllCliente() {
+        try {
+            $sentencia=$this->conexion->prepare("SELECT * FROM Cliente");
+            $sentencia->execute();
+            $resultado=array();
+            while($fila=$sentencia->fetch())
+            {
+                $resultado[]=$fila;
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
+    }
 }
