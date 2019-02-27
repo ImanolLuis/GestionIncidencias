@@ -2,7 +2,6 @@
 
 class Anotacion {
     private $conexion;
-    private $idAnotacion, $fecha, $idIncidencia, $idEmpleado;
     private $idAnotacion, $anotacion, $fecha, $idIncidencia, $idEmpleado;
 
     /**
@@ -83,5 +82,22 @@ class Anotacion {
      */
     public function setIdEmpleado($idEmpleado) {
         $this->idEmpleado = $idEmpleado;
+    }
+
+    public function selectAllAnotacionByIncidencia() {
+        $datos=array("idIncidencia"=>$this->idIncidencia);
+        try {
+            $sentencia=$this->conexion->prepare("SELECT * FROM Anotacion WHERE idIncidencia=:idIncidencia");
+            $sentencia->execute($datos);
+            $resultado=array();
+            while($fila=$sentencia->fetch()) {
+                $resultado[]=$fila;
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
     }
 }

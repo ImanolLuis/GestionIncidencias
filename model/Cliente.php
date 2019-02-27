@@ -96,6 +96,20 @@ class Cliente {
         $this->telefono = $telefono;
     }
 
+    public function selectClienteById() {
+        $datos=array("idCliente"=>$this->idCliente);
+        try {
+            $sentencia=$this->conexion->prepare("SELECT * FROM Cliente WHERE idCliente=:idCliente");
+            $sentencia->execute($datos);
+            $resultado=$sentencia->fetch();
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
+    }
+
     public function selectNombreApellidosCliente($idCliente) {
         $datos=array("idCliente"=>$idCliente);
         try {

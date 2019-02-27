@@ -2,7 +2,7 @@
 
 session_start();
 
-if(isset($_SESSION["login"])) {
+if(isset($_SESSION["login"])||isset($_POST["usuario"])) {
     if(isset($_GET["controller"])) {
         switch ($_GET["controller"]) {
             case 'Empleado':
@@ -17,7 +17,7 @@ if(isset($_SESSION["login"])) {
                 require_once 'controller/AnotacionController.php';
                 $controllerObj=new AnotacionController();
                 break;
-            case 'Incidencia':
+            default:
                 require_once 'controller/IncidenciaController.php';
                 $controllerObj=new IncidenciaController();
         }
@@ -30,11 +30,7 @@ if(isset($_SESSION["login"])) {
 } else {
     require_once 'controller/EmpleadoController.php';
     $controllerObj=new EmpleadoController();
-    if(isset($_POST["usuario"])) {
-        $controllerObj->run("login");
-    } else {
-        $controllerObj->run("");
-    }
+    $controllerObj->run("");
 
 }
 

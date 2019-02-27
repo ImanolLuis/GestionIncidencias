@@ -154,6 +154,20 @@ class Incidencia {
         }
     }
 
+    public function selectIncidenciaById() {
+        $datos=array("idIncidencia"=>$this->idIncidencia);
+        try {
+            $sentencia=$this->conexion->prepare("SELECT * FROM Incidencia WHERE idIncidencia = :idIncidencia");
+            $sentencia->execute($datos);
+            $resultado=$sentencia->fetch();
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+            return null;
+        }
+    }
+
     public function insert() {
         $datos=array("descripcionBreve"=>$this->descripcionBreve,"descripcionDetallada"=>$this->descripcionDetallada, "prioridad"=>$this->prioridad,"estado"=>$this->estado,"categoria"=>$this->categoria,"idCliente"=>$this->idCliente,"idEmpleado"=>$this->idEmpleado);
         try {

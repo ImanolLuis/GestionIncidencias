@@ -12,7 +12,7 @@
     {% include "navbar.twig" %}
     <main role="main" class="container">
         <h3 class="mt-4 mb-3">Listado de incidencias con filtros</h3>
-        <div class="my-3 p-3 bg-white shadow-sm">
+        <div class="my-3 p-3 bg-white shadow-lg">
             <h4 class="mb-3"><a data-toggle="collapse" href="#buscarIncidencias">B&uacute;queda de incidencias</a></h4>
             <div id="buscarIncidencias" class="collapse multi-collapse row">
                 <form action="index.php?action=search" method="post" class="form-inline col-lg-4">
@@ -62,7 +62,7 @@
             </div>
         </div>
         {% if incidencias|length > 0 %}
-        <div class="my-3 p-3 bg-white shadow-sm table-responsive">
+        <div class="my-3 p-3 bg-white shadow-lg table-responsive">
             <table class="table table-bordered table-striped text-center">
                 <thead>
                 <tr>

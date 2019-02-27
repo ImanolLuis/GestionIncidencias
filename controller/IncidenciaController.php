@@ -15,6 +15,7 @@ class IncidenciaController {
         require_once __DIR__ . "/../model/Incidencia.php";
         require_once __DIR__ . "/../model/Cliente.php";
         require_once __DIR__ . "/../model/Empleado.php";
+        require_once __DIR__ . "/../model/Anotacion.php";
         require_once __DIR__ . "/../vendor/autoload.php";
 
         $this->conectar = new Conectar();
@@ -26,6 +27,9 @@ class IncidenciaController {
         switch ($accion) {
             case "registrar":
                 $this->registrar();
+                break;
+            case "ver":
+                $this->ver();
                 break;
             case "insert":
                 $this->insert();
@@ -52,6 +56,26 @@ class IncidenciaController {
         $empleados=$empleado->selectAllTecnico();
 
         echo $this->twig->render('RegistrarIncidenciaView.twig', array("clientes"=>$clientes,"empleados"=>$empleados));
+    }
+
+    private function ver() {
+        if(isset($_GET["incidencia"]))
+        {
+            $incidencia=new Incidencia($this->conexion);
+            $incidencia->setIdIncidencia($_GET["incidencia"]);
+            $incidencia=$incidencia->selectIncidenciaById($_GET["incidencia"]);
+
+            $cliente=new Cliente($this->conexion);
+            $cliente->setIdCliente($incidencia["idCliente"]);
+            $cliente=$cliente->selectClienteById();
+            $empleado=new Empleado($this->conexion);
+            $empleados=$empleado->selectAllTecnico();
+            $anotacion=new Anotacion($this->conexion);
+            $anotacion->setIdIncidencia($incidencia["idIncidencia"]);
+            $anotaciones=$anotacion->selectAllAnotacionByIncidencia();
+
+            echo $this->twig->render('SeguimientoIncidenciaView.twig', array("incidencia"=>$incidencia,"cliente"=>$cliente,"empleados"=>$empleados,"anotaciones"=>$anotaciones, "usuario"=>$_SESSION["login"], "tecnico"=>$_SESSION["tecnico"]));
+        }
     }
 
     private function insert() {
