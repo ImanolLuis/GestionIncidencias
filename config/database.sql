@@ -66,12 +66,12 @@ CREATE TABLE IF NOT EXISTS `GestionIncidencias`.`incidencia` (
   CONSTRAINT `fk_incidencia_cliente`
     FOREIGN KEY (`idCliente`)
     REFERENCES `GestionIncidencias`.`cliente` (`idCliente`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_incidencia_empleado`
     FOREIGN KEY (`idEmpleado`)
     REFERENCES `GestionIncidencias`.`empleado` (`idEmpleado`)
-    ON DELETE NO ACTION
+    ON DELETE SET NULL
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
@@ -83,6 +83,7 @@ DROP TABLE IF EXISTS `GestionIncidencias`.`anotacion` ;
 
 CREATE TABLE IF NOT EXISTS `GestionIncidencias`.`anotacion` (
   `idAnotacion` INT NOT NULL AUTO_INCREMENT,
+  `anotacion` VARCHAR(255) NULL,
   `fecha` DATETIME NULL,
   `idIncidencia` INT NOT NULL,
   `idEmpleado` INT NOT NULL,

@@ -3,6 +3,7 @@
 class Anotacion {
     private $conexion;
     private $idAnotacion, $fecha, $idIncidencia, $idEmpleado;
+    private $idAnotacion, $anotacion, $fecha, $idIncidencia, $idEmpleado;
 
     /**
      * Anotacion constructor.
@@ -24,6 +25,22 @@ class Anotacion {
      */
     public function setIdAnotacion($idAnotacion) {
         $this->idAnotacion = $idAnotacion;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAnotacion()
+    {
+        return $this->anotacion;
+    }
+
+    /**
+     * @param mixed $anotacion
+     */
+    public function setAnotacion($anotacion)
+    {
+        $this->anotacion = $anotacion;
     }
 
     /**
