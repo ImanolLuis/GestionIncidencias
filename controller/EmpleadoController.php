@@ -48,7 +48,7 @@ class EmpleadoController {
             $empleado=$empleado->validarUsuario();
 
             if($empleado) {
-                $_SESSION["login"]=true;
+                $_SESSION["login"]=$empleado["idEmpleado"];
                 header("Location: index.php");
             } else {
                 echo $this->twig->render('loginView.twig', array("error"=>true,"usuario"=>$usuario, "contrasenna"=>$contrasenna));

@@ -1,5 +1,9 @@
 <?php
 
+if(session_id()=='') {
+    session_start();
+}
+
 class IncidenciaController {
     private $conectar, $conexion, $twig;
 
@@ -26,6 +30,9 @@ class IncidenciaController {
             case "insert":
                 $this->insert();
                 break;
+            case "search":
+                $this->search();
+                break;
             default:
                 $this->inicio();
         }
@@ -35,15 +42,7 @@ class IncidenciaController {
         $incidencia=new Incidencia($this->conexion);
         $incidencias=$incidencia->selectAllIncidencia();
 
-        for($i=0;$i<count($incidencias);$i++)
-        {
-            $cliente=new Cliente($this->conexion);
-            $incidencias[$i]["cliente"]=$cliente->selectNombreApellidosCliente($incidencias[$i]["idCliente"]);
-            $empleado=new Empleado($this->conexion);
-            $incidencias[$i]["empleado"]=$empleado->selectNombreApellidosEmpleado($incidencias[$i]["idEmpleado"]);
-        }
-
-        echo $this->twig->render('indexView.twig', array("incidencias"=>$incidencias));
+        $this->mostrarIncidencias($incidencias);
     }
 
     private function registrar() {
@@ -51,7 +50,6 @@ class IncidenciaController {
         $clientes=$cliente->selectAllCliente();
         $empleado=new Empleado($this->conexion);
         $empleados=$empleado->selectAllTecnico();
-
 
         echo $this->twig->render('RegistrarIncidenciaView.twig', array("clientes"=>$clientes,"empleados"=>$empleados));
     }
@@ -76,5 +74,56 @@ class IncidenciaController {
         $incidencia->insert();
 
         header("Location: index.php");
+    }
+
+    private function search() {
+        if(isset($_POST["tipo"]))
+        {
+            $incidencia=new Incidencia($this->conexion);
+            switch($_POST["tipo"]) {
+                case "prioridad":
+                    $incidencias=$incidencia->selectIncidenciaByPrioridad($_POST["prioridad"]);
+                    break;
+                case "estado":
+                    $incidencias=$incidencia->selectIncidenciaByEstado($_POST["estado"]);
+                    break;
+                case "categoria":
+                    $incidencias=$incidencia->selectIncidenciaByCategoria($_POST["categoria"]);
+                    break;
+                case "tecnico":
+                    if($_POST["tecnico"]=="Yo") {
+                        $incidencias=$incidencia->selectIncidenciaByEmpleado($_SESSION["login"], "Yo");
+                    } else {
+                        $incidencias=$incidencia->selectIncidenciaByEmpleado($_SESSION["login"], "SinAsignar");
+                    }
+                    break;
+                default:
+                    switch($_POST["fecha"]) {
+                        case "ultimaSemana":
+                            $incidencias=$incidencia->selectIncidenciaByFecha("ultimaSemana");
+                            break;
+                        case "ultimoMes":
+                            $incidencias=$incidencia->selectIncidenciaByFecha("ultimoMes");
+                            break;
+                        default:
+                            $incidencias=$incidencia->selectIncidenciaByFecha("");
+                            break;
+                    }
+                    break;
+            }
+            $this->mostrarIncidencias($incidencias);
+        }
+    }
+
+    private function mostrarIncidencias($incidencias) {
+        for($i=0;$i<count($incidencias);$i++)
+        {
+            $cliente=new Cliente($this->conexion);
+            $incidencias[$i]["cliente"]=$cliente->selectNombreApellidosCliente($incidencias[$i]["idCliente"]);
+            $empleado=new Empleado($this->conexion);
+            $incidencias[$i]["empleado"]=$empleado->selectNombreApellidosEmpleado($incidencias[$i]["idEmpleado"]);
+        }
+
+        echo $this->twig->render('indexView.twig', array("incidencias"=>$incidencias));
     }
 }
