@@ -143,4 +143,15 @@ class Cliente {
             return null;
         }
     }
+
+    public function update() {
+        $datos=array("idCliente"=>$this->idCliente,"nombre"=>$this->nombre, "apellidos"=>$this->apellidos,"empresa"=>$this->empresa,"email"=>$this->email,"telefono"=>$this->telefono);
+        try {
+            $sentencia=$this->conexion->prepare("UPDATE Cliente SET nombre = :nombre, apellidos = :apellidos, empresa = :empresa, email = :email, telefono = :telefono WHERE idCliente = :idCliente");
+            $sentencia->execute($datos);
+            $this->conexion=null;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+        }
+    }
 }

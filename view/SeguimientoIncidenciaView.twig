@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del cliente</h4>
-                    <form class="needs-validation mt-4" novalidate>
+                    <form id="actualizarCliente" class="needs-validation mt-4" novalidate>
                         <div class="mb-3">
                             <label for="nombreCliente">Nombre</label>
                             <input type="text" class="form-control" id="nombreCliente" name="nombre" required placeholder="Nombre" value="{{ cliente.nombre }}" />
@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-md-6">
                     <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del t&eacute;cnico</h4>
-                    <form class="needs-validation mt-4" novalidate>
+                    <form id="actualizarTecnico" class="needs-validation mt-4" novalidate>
                         <div class="mb-3">
                             <label for="tecnico">T&eacute;cnico asignado</label>
                             <select class="custom-select d-block w-100" id="tecnico" name="tecnico">
@@ -78,7 +78,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <input type="hidden" name="idIncidencia" value="{{ incidencia.idIncidencia }}" />
+                        <input type="hidden" id="idIncidencia" name="idIncidencia" value="{{ incidencia.idIncidencia }}" />
                         <button class="btn btn-primary btn-md btn-block" type="submit">Actualizar t&eacute;cnico asignado</button>
                     </form>
                 </div>
@@ -86,30 +86,36 @@
             <div class="row">
                 <div class="col-md-6">
                     <h4 class="border-bottom border-gray pb-2 my-4">Anotaciones</h4>
-                    <blockquote class="blockquote">
-                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-                    </blockquote>
-                    <blockquote class="blockquote">
-                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-                    </blockquote>
-                    <blockquote class="blockquote">
-                        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-                        <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
-                    </blockquote>
+                    <div id="anotaciones">
+                    </div>
+                    <button type="button" id="refrescarAnotaciones" class="btn btn-primary mt-2"><i class="fas fa-sync-alt"></i> Referescar</button>
                 </div>
-                {% if tecnico == 1 %}
+                {% if usuario.esTecnico == 1 %}
                 <div class="col-md-6">
-                    <h4 class="border-bottom border-gray pb-2 mti-4">Publicar anotaci&oacute;n</h4>
-                    <form class="needs-validation" novalidate>
-                        <textarea class="form-control" id="publicarAnotacion" name="anotacion" rows="5" placeholder="Publicar anotaci&oacute;n" required></textarea>
+                    <h4 class="border-bottom border-gray pb-2 mt-4">Publicar anotaci&oacute;n</h4>
+                    <form id="publicarAnotacion" class="needs-validation" novalidate>
+                        <textarea class="form-control" id="anotacion" name="anotacion" rows="5" placeholder="Publicar anotaci&oacute;n" required></textarea>
                         <input type="hidden" name="idIncidencia" value="{{ incidencia.idIncidencia }}" />
-                        <input type="hidden" name="idEmpleado" value="{{ usuario }}" />
+                        <input type="hidden" name="idEmpleado" value="{{ usuario.idEmpleado }}" />
                         <button class="btn btn-primary btn-md btn-block mt-2" type="submit">Publicar anotaci&oacute;n</button>
                     </form>
                 </div>
                 {% endif %}
+            </div>
+        </div>
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert" role="alert">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -118,5 +124,5 @@
 
 {% block scripts %}
     <script src="assets/js/forms.js"></script>
-    <script src="assets/js/incidencia.js"></script>
+    <script src="assets/js/verIncidencia.js"></script>
 {% endblock %}

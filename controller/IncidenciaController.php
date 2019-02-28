@@ -37,6 +37,9 @@ class IncidenciaController {
             case "search":
                 $this->search();
                 break;
+            case "updateTecnico":
+                $this->updateTecnico();
+                break;
             default:
                 $this->inicio();
         }
@@ -70,11 +73,8 @@ class IncidenciaController {
             $cliente=$cliente->selectClienteById();
             $empleado=new Empleado($this->conexion);
             $empleados=$empleado->selectAllTecnico();
-            $anotacion=new Anotacion($this->conexion);
-            $anotacion->setIdIncidencia($incidencia["idIncidencia"]);
-            $anotaciones=$anotacion->selectAllAnotacionByIncidencia();
 
-            echo $this->twig->render('SeguimientoIncidenciaView.twig', array("incidencia"=>$incidencia,"cliente"=>$cliente,"empleados"=>$empleados,"anotaciones"=>$anotaciones, "usuario"=>$_SESSION["login"], "tecnico"=>$_SESSION["tecnico"]));
+            echo $this->twig->render('SeguimientoIncidenciaView.twig', array("incidencia"=>$incidencia,"cliente"=>$cliente,"empleados"=>$empleados, "usuario"=>$_SESSION["login"]));
         }
     }
 
@@ -116,9 +116,9 @@ class IncidenciaController {
                     break;
                 case "tecnico":
                     if($_POST["tecnico"]=="Yo") {
-                        $incidencias=$incidencia->selectIncidenciaByEmpleado($_SESSION["login"], "Yo");
+                        $incidencias=$incidencia->selectIncidenciaByEmpleado($_SESSION["login"]["idEmpleado"], "Yo");
                     } else {
-                        $incidencias=$incidencia->selectIncidenciaByEmpleado($_SESSION["login"], "SinAsignar");
+                        $incidencias=$incidencia->selectIncidenciaByEmpleado("", "SinAsignar");
                     }
                     break;
                 default:
@@ -137,6 +137,23 @@ class IncidenciaController {
             }
             $this->mostrarIncidencias($incidencias);
         }
+    }
+
+    private function updateTecnico() {
+        $incidencia=new Incidencia($this->conexion);
+        $incidencia->setIdIncidencia($_POST["idIncidencia"]);
+        if($_POST["tecnico"]=="")
+        {
+            $incidencia->setIdEmpleado(null);
+        }
+        else
+        {
+            $incidencia->setIdEmpleado($_POST["tecnico"]);
+        }
+
+        $incidencia->updateTecnico();
+
+        header("Location: index.php");
     }
 
     private function mostrarIncidencias($incidencias) {

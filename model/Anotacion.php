@@ -87,7 +87,7 @@ class Anotacion {
     public function selectAllAnotacionByIncidencia() {
         $datos=array("idIncidencia"=>$this->idIncidencia);
         try {
-            $sentencia=$this->conexion->prepare("SELECT * FROM Anotacion WHERE idIncidencia=:idIncidencia");
+            $sentencia=$this->conexion->prepare("SELECT * FROM Anotacion WHERE idIncidencia=:idIncidencia ORDER BY fecha DESC");
             $sentencia->execute($datos);
             $resultado=array();
             while($fila=$sentencia->fetch()) {
@@ -98,6 +98,18 @@ class Anotacion {
         } catch (PDOException $e) {
             $this->conexion=null;
             return null;
+        }
+    }
+
+    public function insert() {
+        $datos=array("anotacion"=>$this->anotacion,"idIncidencia"=>$this->idIncidencia, "idEmpleado"=>$this->idEmpleado);
+        try {
+            $sentencia=$this->conexion->prepare("INSERT INTO Anotacion (anotacion, fecha, idIncidencia, idEmpleado) 
+            VALUES (:anotacion, NOW(), :idIncidencia, :idEmpleado)");
+            $sentencia->execute($datos);
+            $this->conexion=null;
+        } catch (PDOException $e) {
+            $this->conexion=null;
         }
     }
 }

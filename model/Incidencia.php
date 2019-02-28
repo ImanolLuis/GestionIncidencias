@@ -280,4 +280,15 @@ class Incidencia {
             return null;
         }
     }
+
+    public function updateTecnico() {
+        $datos=array("idIncidencia"=>$this->idIncidencia,"idEmpleado"=>$this->idEmpleado);
+        try {
+            $sentencia=$this->conexion->prepare("UPDATE Incidencia SET idEmpleado = :idEmpleado WHERE idIncidencia = :idIncidencia");
+            $sentencia->execute($datos);
+            $this->conexion=null;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+        }
+    }
 }
