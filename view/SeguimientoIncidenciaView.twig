@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del cliente</h4>
-                    <form id="actualizarCliente" class="needs-validation mt-4" novalidate>
+                    <form id="actualizarCliente" class="mt-4">
                         <div class="mb-3">
                             <label for="nombreCliente">Nombre</label>
                             <input type="text" class="form-control" id="nombreCliente" name="nombre" required placeholder="Nombre" value="{{ cliente.nombre }}" />
@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-md-6">
                     <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del t&eacute;cnico</h4>
-                    <form id="actualizarTecnico" class="needs-validation mt-4" novalidate>
+                    <form id="actualizarTecnico" class="mt-4">
                         <div class="mb-3">
                             <label for="tecnico">T&eacute;cnico asignado</label>
                             <select class="custom-select d-block w-100" id="tecnico" name="tecnico">
@@ -93,7 +93,7 @@
                 {% if usuario.esTecnico == 1 %}
                 <div class="col-md-6">
                     <h4 class="border-bottom border-gray pb-2 mt-4">Publicar anotaci&oacute;n</h4>
-                    <form id="publicarAnotacion" class="needs-validation" novalidate>
+                    <form id="publicarAnotacion">
                         <textarea class="form-control" id="anotacion" name="anotacion" rows="5" placeholder="Publicar anotaci&oacute;n" required></textarea>
                         <input type="hidden" name="idIncidencia" value="{{ incidencia.idIncidencia }}" />
                         <input type="hidden" name="idEmpleado" value="{{ usuario.idEmpleado }}" />
@@ -123,6 +123,5 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="assets/js/forms.js"></script>
     <script src="assets/js/verIncidencia.js"></script>
 {% endblock %}
