@@ -40,6 +40,12 @@ class IncidenciaController {
             case "updateTecnico":
                 $this->updateTecnico();
                 break;
+            case "estadisticas":
+                $this->estadisticas();
+                break;
+            case "getEstadisticas":
+                $this->getEstadisticas();
+                break;
             default:
                 $this->inicio();
         }
@@ -154,6 +160,30 @@ class IncidenciaController {
         $incidencia->updateTecnico();
 
         header("Location: index.php");
+    }
+
+    private function estadisticas() {
+
+        echo $this->twig->render('EstadisticasView.twig');
+    }
+
+    private function getEstadisticas() {
+        if(isset($_GET["tipo"])) {
+            $incidencia = new Incidencia($this->conexion);
+            switch ($_GET["tipo"]) {
+                case "cliente":
+                    $incidencias = $incidencia->selectIncidenciaByClienteStat();
+                    break;
+                case "empleado":
+                    $incidencias = $incidencia->selectIncidenciaByEmpleadoStat();
+                    break;
+                default:
+                    $incidencias = $incidencia->selectIncidenciaByCategoriaStat();
+                    break;
+            }
+            header('Content-type: application/json');
+            echo json_encode($incidencias);
+        }
     }
 
     private function mostrarIncidencias($incidencias) {

@@ -291,4 +291,54 @@ class Incidencia {
             $this->conexion=null;
         }
     }
+
+    public function selectIncidenciaByCategoriaStat() {
+        try {
+            $sentencia=$this->conexion->prepare("SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia GROUP BY categoria");
+            $sentencia->execute();
+            $resultado=array();
+            while($fila=$sentencia->fetch())
+            {
+                $resultado[]=$fila;
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+        }
+    }
+
+    public function selectIncidenciaByClienteStat() {
+        try {
+            $sentencia=$this->conexion->prepare("SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia 
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente GROUP BY Incidencia.idCliente");
+            $sentencia->execute();
+            $resultado=array();
+            while($fila=$sentencia->fetch())
+            {
+                $resultado[]=$fila;
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+        }
+    }
+
+    public function selectIncidenciaByEmpleadoStat() {
+        try {
+            $sentencia=$this->conexion->prepare("SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia 
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado GROUP BY Incidencia.idEmpleado");
+            $sentencia->execute();
+            $resultado=array();
+            while($fila=$sentencia->fetch())
+            {
+                $resultado[]=$fila;
+            }
+            $this->conexion=null;
+            return $resultado;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+        }
+    }
 }

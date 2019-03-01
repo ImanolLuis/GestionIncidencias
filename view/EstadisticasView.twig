@@ -1,0 +1,116 @@
+{% extends "layout.twig" %}
+
+{% block titulo %}
+    Estad&iacute;sticas de las incidencias registradas en el sistema
+{% endblock %}
+
+{% block cuerpo %}
+    {% include "navbar.twig" %}
+    <main role="main" class="container">
+        <h3 class="mt-4 mb-3">Estad&iacute;sticas de las incidencias registradas en el sistema</h3>
+        <div class="my-3 p-3 bg-white shadow-lg">
+            <h4 class="border-bottom border-gray pb-2 mb-0">Estadísticas por tipo de incidencias</h4>
+            <div class="row p-3">
+                <form id="prioridadCategoria" class="form-inline col-lg-4">
+                    <label class="sr-only" for="prioridadCategoriaSelect">Prioridad</label>
+                    <select class="custom-select w-50" id="prioridadCategoriaSelect" name="prioridad">
+                        <option value="Alta">Prioridad alta</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Prioridad baja</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+                <form id="estadoCategoria" class="form-inline col-lg-4 mt-2 mt-lg-0">
+                    <label class="sr-only" for="estadoCategoriaSelect">Estado</label>
+                    <select class="custom-select w-50" id="estadoCategoriaSelect" name="estado">
+                        <option value="Abierta">Incidencia abierta</option>
+                        <option value="Cerrada">Incidencia cerrada</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+                <form id="fechaCategoria" class="form-inline col-lg-4 mt-2 mt-lg-0">
+                    <label class="sr-only" for="fechaCategoriaSelect">Fecha</label>
+                    <select class="custom-select w-50" id="fechaCategoriaSelect" name="fecha">
+                        <option value="ultimaSemana">Última semana</option>
+                        <option value="ultimoMes">Último mes</option>
+                        <option value="ultimoAnno">Último año</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+            </div>
+            <div class="mt-4">
+                <canvas id="tipoIncidenciaStat" width="400" height="200"></canvas>
+            </div>
+            <h4 class="border-bottom border-gray pb-2 mb-0">Estadísticas por cliente</h4>
+            <div class="row p-3">
+                <form id="prioridadCliente" class="form-inline col-lg-4">
+                    <label class="sr-only" for="prioridadClienteSelect">Prioridad</label>
+                    <select class="custom-select w-50" id="prioridadClienteSelect" name="prioridad">
+                        <option value="Alta">Prioridad alta</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Prioridad baja</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+                <form id="estadoCliente" class="form-inline col-lg-4 mt-2 mt-lg-0">
+                    <label class="sr-only" for="estadoClienteSelect">Estado</label>
+                    <select class="custom-select w-50" id="estadoClienteSelect" name="estado">
+                        <option value="Abierta">Incidencia abierta</option>
+                        <option value="Cerrada">Incidencia cerrada</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+                <form id="fechaCliente" class="form-inline col-lg-4 mt-2 mt-lg-0">
+                    <label class="sr-only" for="fechaClienteSelect">Fecha</label>
+                    <select class="custom-select w-50" id="fechaClienteSelect" name="fecha">
+                        <option value="ultimaSemana">Última semana</option>
+                        <option value="ultimoMes">Último mes</option>
+                        <option value="ultimoAnno">Último año</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+            </div>
+            <div class="mt-4">
+                <canvas id="clienteStat" width="400" height="200"></canvas>
+            </div>
+            <h4 class="border-bottom border-gray pb-2 mb-0">Estadísticas por empleado</h4>
+            <div class="row p-3">
+                <form id="prioridadEmpleado" class="form-inline col-lg-4">
+                    <label class="sr-only" for="prioridadEmpleadoSelect">Prioridad</label>
+                    <select class="custom-select w-50" id="prioridadEmpleadoSelect" name="prioridad">
+                        <option value="Alta">Prioridad alta</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Prioridad baja</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+                <form id="estadoEmpleado" class="form-inline col-lg-4 mt-2 mt-lg-0">
+                    <label class="sr-only" for="estadoEmpleadoSelect">Estado</label>
+                    <select class="custom-select w-50" id="estadoEmpleadoSelect" name="estado">
+                        <option value="Abierta">Incidencia abierta</option>
+                        <option value="Cerrada">Incidencia cerrada</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+                <form id="fechaEmpleado" class="form-inline col-lg-4 mt-2 mt-lg-0">
+                    <label class="sr-only" for="fechaEmpleadoSelect">Fecha</label>
+                    <select class="custom-select w-50" id="fechaEmpleadoSelect" name="fecha">
+                        <option value="ultimaSemana">Última semana</option>
+                        <option value="ultimoMes">Último mes</option>
+                        <option value="ultimoAnno">Último año</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+            </div>
+            <div class="mt-4">
+                <canvas id="empleadoStat" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </main>
+    {% include "footer.twig" %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="assets/js/Chart.min.js"></script>
+    <script src="assets/js/estadisticas.js"></script>
+{% endblock %}
