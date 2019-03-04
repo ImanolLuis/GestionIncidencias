@@ -19,20 +19,28 @@
                     <label for="descripcionDetallada">Descripci&oacute;n detallada</label>
                     <textarea class="form-control" id="descripcionDetallada" rows="5" readonly>{{ incidencia.descripcionDetallada }}</textarea>
                 </div>
-                <div class="mb-3">
-                    <label for="fecha">Fecha</label>
-                    <input type="text" class="form-control" id="fecha" readonly value="{{ incidencia.fecha|date("d M Y H:i", "Europe/Madrid") }}" />
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha">Fecha</label>
+                        <input type="text" class="form-control" id="fecha" readonly value="{{ incidencia.fecha|date("d M Y H:i", "Europe/Madrid") }}" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="estado">Estado de la incidencia</label>
+                        <div class="form-inline">
+                            <input type="text" class="form-control {% if incidencia.estado == 'Abierta' %}w-50{% else %}w-100{% endif %}" id="estado" readonly value="{{ incidencia.estado }}" />
+                            {% if incidencia.estado == 'Abierta' %}
+                            <button id="cerrarIncidencia" class="btn btn-primary ml-2" type="submit">Cerrar</button>
+                            {% endif %}
+                        </div>
+
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="prioridad">Prioridad de la incidencia</label>
                         <input type="text" class="form-control" id="prioridad" readonly value="{{ incidencia.prioridad }}" />
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="estado">Estado de la incidencia</label>
-                        <input type="text" class="form-control" id="estado" readonly value="{{ incidencia.estado }}" />
-                    </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label for="categoria">Categor&iacute;a</label>
                         <input type="text" class="form-control" id="categoria" readonly value="{{ incidencia.categoria }}" />
                     </div>

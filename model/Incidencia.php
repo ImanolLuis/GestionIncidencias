@@ -256,13 +256,13 @@ class Incidencia {
     public function selectIncidenciaByFecha($fecha) {
         switch($fecha) {
             case "ultimaSemana":
-                $consulta="SELECT * FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 7 DAY); ORDER BY fecha DESC";
+                $consulta="SELECT * FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 7 DAY) ORDER BY fecha DESC";
                 break;
             case "ultimoMes":
-                $consulta="SELECT * FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH); ORDER BY fecha DESC";
+                $consulta="SELECT * FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH) ORDER BY fecha DESC";
                 break;
             default:
-                $consulta="SELECT * FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR); ORDER BY fecha DESC";
+                $consulta="SELECT * FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR) ORDER BY fecha DESC";
                 break;
         }
         try {
@@ -281,6 +281,17 @@ class Incidencia {
         }
     }
 
+    public function closeIncidencia() {
+        $datos=array("idIncidencia"=>$this->idIncidencia,"estado"=>$this->estado);
+        try {
+            $sentencia=$this->conexion->prepare("UPDATE Incidencia SET estado = :estado WHERE idIncidencia = :idIncidencia");
+            $sentencia->execute($datos);
+            $this->conexion=null;
+        } catch (PDOException $e) {
+            $this->conexion=null;
+        }
+    }
+
     public function updateTecnico() {
         $datos=array("idIncidencia"=>$this->idIncidencia,"idEmpleado"=>$this->idEmpleado);
         try {
@@ -292,10 +303,35 @@ class Incidencia {
         }
     }
 
-    public function selectIncidenciaByCategoriaStat() {
+    public function selectIncidenciaByCategoriaStat($tipo = "", $dato = "") {
+        switch($tipo) {
+            case "prioridad":
+                $consulta="SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia WHERE prioridad = :dato GROUP BY categoria ORDER BY COUNT(idIncidencia) DESC";
+                break;
+            case "estado":
+                $consulta="SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia WHERE estado = :dato GROUP BY categoria ORDER BY COUNT(idIncidencia) DESC";
+                break;
+            case "fecha":
+                switch($dato) {
+                    case "ultimaSemana":
+                        $consulta="SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 7 DAY) GROUP BY categoria ORDER BY COUNT(idIncidencia) DESC";
+                        break;
+                    case "ultimoMes":
+                        $consulta="SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY categoria ORDER BY COUNT(idIncidencia) DESC";
+                        break;
+                    default:
+                        $consulta="SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia WHERE fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY categoria ORDER BY COUNT(idIncidencia) DESC";
+                        break;
+                }
+                break;
+            default:
+                $consulta="SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia GROUP BY categoria ORDER BY COUNT(idIncidencia) DESC";
+                break;
+        }
+        $datos=array("dato"=>$dato);
         try {
-            $sentencia=$this->conexion->prepare("SELECT categoria AS etiqueta, COUNT(idIncidencia) AS dato FROM Incidencia GROUP BY categoria");
-            $sentencia->execute();
+            $sentencia=$this->conexion->prepare($consulta);
+            $sentencia->execute($datos);
             $resultado=array();
             while($fila=$sentencia->fetch())
             {
@@ -308,11 +344,41 @@ class Incidencia {
         }
     }
 
-    public function selectIncidenciaByClienteStat() {
+    public function selectIncidenciaByClienteStat($tipo = "", $dato = "") {
+        switch($tipo) {
+            case "prioridad":
+                $consulta="SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente WHERE Incidencia.prioridad = :dato GROUP BY Incidencia.idCliente ORDER BY COUNT(Incidencia.idIncidencia) DESC";
+                break;
+            case "estado":
+                $consulta="SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente WHERE Incidencia.estado = :dato GROUP BY Incidencia.idCliente ORDER BY COUNT(Incidencia.idIncidencia) DESC";
+                break;
+            case "fecha":
+                switch($dato) {
+                    case "ultimaSemana":
+                        $consulta="SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente WHERE Incidencia.fecha >= DATE_SUB(NOW(), INTERVAL 7 DAY) GROUP BY Incidencia.idCliente ORDER BY COUNT(Incidencia.idIncidencia) DESC";
+                        break;
+                    case "ultimoMes":
+                        $consulta="SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia 
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente WHERE Incidencia.fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY Incidencia.idCliente ORDER BY COUNT(Incidencia.idIncidencia) DESC";
+                        break;
+                    default:
+                        $consulta="SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato  FROM Incidencia
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente WHERE Incidencia.fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY Incidencia.idCliente ORDER BY COUNT(Incidencia.idIncidencia) DESC";
+                        break;
+                }
+                break;
+            default:
+                $consulta="SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia 
+INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente GROUP BY Incidencia.idCliente";
+                break;
+        }
+        $datos=array("dato"=>$dato);
         try {
-            $sentencia=$this->conexion->prepare("SELECT CONCAT(Cliente.nombre, ' ', Cliente.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia 
-INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente GROUP BY Incidencia.idCliente");
-            $sentencia->execute();
+            $sentencia=$this->conexion->prepare($consulta);
+            $sentencia->execute($datos);
             $resultado=array();
             while($fila=$sentencia->fetch())
             {
@@ -325,11 +391,41 @@ INNER JOIN Cliente ON Cliente.idCliente = Incidencia.idCliente GROUP BY Incidenc
         }
     }
 
-    public function selectIncidenciaByEmpleadoStat() {
+    public function selectIncidenciaByEmpleadoStat($tipo = "", $dato = "") {
+        switch($tipo) {
+            case "prioridad":
+                $consulta="SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(*) AS dato FROM Incidencia 
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado WHERE Incidencia.prioridad = :dato GROUP BY Incidencia.idEmpleado ORDER BY COUNT(*) DESC";
+                break;
+            case "estado":
+                $consulta="SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(*) AS dato FROM Incidencia
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado WHERE Incidencia.estado = :dato GROUP BY Incidencia.idEmpleado ORDER BY COUNT(*) DESC";
+                break;
+            case "fecha":
+                switch($dato) {
+                    case "ultimaSemana":
+                        $consulta="SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(*) AS dato FROM Incidencia
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado WHERE Incidencia.fecha >= DATE_SUB(NOW(), INTERVAL 7 DAY) GROUP BY Incidencia.idEmpleado ORDER BY COUNT(*) DESC";
+                        break;
+                    case "ultimoMes":
+                        $consulta="SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(*) AS dato FROM Incidencia
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado WHERE Incidencia.fecha >= DATE_SUB(NOW(), INTERVAL 1 MONTH) GROUP BY Incidencia.idEmpleado ORDER BY COUNT(*) DESC";
+                        break;
+                    default:
+                        $consulta="SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(*) AS dato FROM Incidencia
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado WHERE Incidencia.fecha >= DATE_SUB(NOW(), INTERVAL 1 YEAR) GROUP BY Incidencia.idEmpleado ORDER BY COUNT(*) DESC";
+                        break;
+                }
+                break;
+            default:
+                $consulta="SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(*) AS dato FROM Incidencia 
+INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado GROUP BY Incidencia.idEmpleado ORDER BY COUNT(*) DESC";
+                break;
+        }
+        $datos=array("dato"=>$dato);
         try {
-            $sentencia=$this->conexion->prepare("SELECT CONCAT(Empleado.nombre, ' ', Empleado.apellidos) AS etiqueta, COUNT(Incidencia.idIncidencia) AS dato FROM Incidencia 
-INNER JOIN Empleado ON Empleado.idEmpleado = Incidencia.idEmpleado GROUP BY Incidencia.idEmpleado");
-            $sentencia->execute();
+            $sentencia=$this->conexion->prepare($consulta);
+            $sentencia->execute($datos);
             $resultado=array();
             while($fila=$sentencia->fetch())
             {

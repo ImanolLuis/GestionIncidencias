@@ -51,6 +51,19 @@ $(document).ready(function () {
     $("#refrescarAnotaciones").click(function() {
         cargarAnotaciones($("#idIncidencia"));
     });
+
+    $("#cerrarIncidencia").click(function () {
+        let incidencia=$("#idIncidencia");
+        $.ajax({
+            type : "POST",
+            url : "index.php?action=cerrar",
+            data : incidencia
+        }).done(function () {
+            cerrarIncidencia();
+        }).fail(function () {
+            mostrarModal("danger", "Problemas al cerrar la incidencia en el servidor.");
+        });
+    });
 });
 
 function validarCliente() {
@@ -108,6 +121,14 @@ function imprimirAnotaciones(anotaciones) {
             "                                    <footer class='blockquote-footer'>" + anotaciones[i]['empleado'] + " &#124; " + fecha + "</footer>\n" +
             "                                </blockquote>");
     }
+}
+
+function cerrarIncidencia() {
+    $("#cerrarIncidencia").remove();
+    let estado=$("#estado");
+    estado.val("Cerrada");
+    estado.removeClass("w-50");
+    estado.addClass("w-100");
 }
 
 function mostrarModal(tipo, mensaje) {

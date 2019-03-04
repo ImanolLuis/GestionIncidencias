@@ -34,6 +34,9 @@ class IncidenciaController {
             case "insert":
                 $this->insert();
                 break;
+            case "cerrar":
+                $this->cerrar();
+                break;
             case "search":
                 $this->search();
                 break;
@@ -72,7 +75,7 @@ class IncidenciaController {
         {
             $incidencia=new Incidencia($this->conexion);
             $incidencia->setIdIncidencia($_GET["incidencia"]);
-            $incidencia=$incidencia->selectIncidenciaById($_GET["incidencia"]);
+            $incidencia=$incidencia->selectIncidenciaById();
 
             $cliente=new Cliente($this->conexion);
             $cliente->setIdCliente($incidencia["idCliente"]);
@@ -89,7 +92,7 @@ class IncidenciaController {
         $incidencia->setDescripcionBreve($_POST["descripcionBreve"]);
         $incidencia->setDescripcionDetallada($_POST["descripcionDetallada"]);
         $incidencia->setPrioridad($_POST["prioridad"]);
-        $incidencia->setEstado($_POST["estado"]);
+        $incidencia->setEstado("Abierta");
         $incidencia->setCategoria($_POST["categoria"]);
         $incidencia->setIdCliente($_POST["cliente"]);
         if($_POST["tecnico"]=="")
@@ -145,6 +148,15 @@ class IncidenciaController {
         }
     }
 
+    private function cerrar() {
+        if(isset($_POST["idIncidencia"])) {
+            $incidencia=new Incidencia($this->conexion);
+            $incidencia->setIdIncidencia($_POST["idIncidencia"]);
+            $incidencia->setEstado("Cerrada");
+            $incidencia->closeIncidencia();
+        }
+    }
+
     private function updateTecnico() {
         $incidencia=new Incidencia($this->conexion);
         $incidencia->setIdIncidencia($_POST["idIncidencia"]);
@@ -158,8 +170,6 @@ class IncidenciaController {
         }
 
         $incidencia->updateTecnico();
-
-        header("Location: index.php");
     }
 
     private function estadisticas() {
@@ -172,13 +182,37 @@ class IncidenciaController {
             $incidencia = new Incidencia($this->conexion);
             switch ($_GET["tipo"]) {
                 case "cliente":
-                    $incidencias = $incidencia->selectIncidenciaByClienteStat();
+                    if(isset($_POST["prioridad"])) {
+                        $incidencias = $incidencia->selectIncidenciaByClienteStat("prioridad", $_POST["prioridad"]);
+                    } elseif(isset($_POST["estado"])) {
+                        $incidencias = $incidencia->selectIncidenciaByClienteStat("estado", $_POST["estado"]);
+                    } elseif(isset($_POST["fecha"])) {
+                        $incidencias = $incidencia->selectIncidenciaByClienteStat("fecha", $_POST["fecha"]);
+                    } else {
+                        $incidencias = $incidencia->selectIncidenciaByClienteStat("", "");
+                    }
                     break;
                 case "empleado":
-                    $incidencias = $incidencia->selectIncidenciaByEmpleadoStat();
+                    if(isset($_POST["prioridad"])) {
+                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("prioridad", $_POST["prioridad"]);
+                    } elseif(isset($_POST["estado"])) {
+                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("estado", $_POST["estado"]);
+                    } elseif(isset($_POST["fecha"])) {
+                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("fecha", $_POST["fecha"]);
+                    } else {
+                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("", "");
+                    }
                     break;
                 default:
-                    $incidencias = $incidencia->selectIncidenciaByCategoriaStat();
+                    if(isset($_POST["prioridad"])) {
+                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("prioridad", $_POST["prioridad"]);
+                    } elseif(isset($_POST["estado"])) {
+                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("estado", $_POST["estado"]);
+                    } elseif(isset($_POST["fecha"])) {
+                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("fecha", $_POST["fecha"]);
+                    } else {
+                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("", "");
+                    }
                     break;
             }
             header('Content-type: application/json');
