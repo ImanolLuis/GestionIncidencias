@@ -1,9 +1,17 @@
 <?php
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
 
 if(session_id()=='') {
     session_start();
 }
 
+/**
+ * Class IncidenciaController
+ */
 class IncidenciaController {
     private $conectar, $conexion, $twig;
 
@@ -23,6 +31,10 @@ class IncidenciaController {
         $this->twig = new Twig_Environment(new Twig_Loader_Filesystem(__DIR__ . "/../view/"));
     }
 
+    /**
+     * Función que dependiendo de la acción que reciba ejecuta la función correpondiente
+     * @param string $accion
+     */
     public function run($accion = "") {
         switch ($accion) {
             case "registrar":
@@ -54,6 +66,9 @@ class IncidenciaController {
         }
     }
 
+    /**
+     * Función que muestra la pantalla de inicio con el listado de incidencias
+     */
     private function inicio() {
         $incidencia=new Incidencia($this->conexion);
         $incidencias=$incidencia->selectAllIncidencia();
@@ -61,6 +76,9 @@ class IncidenciaController {
         $this->mostrarIncidencias($incidencias);
     }
 
+    /**
+     * Función que muestra la pantalla de registrar incidencias
+     */
     private function registrar() {
         $cliente=new Cliente($this->conexion);
         $clientes=$cliente->selectAllCliente();
@@ -70,6 +88,9 @@ class IncidenciaController {
         echo $this->twig->render('RegistrarIncidenciaView.twig', array("clientes"=>$clientes,"empleados"=>$empleados));
     }
 
+    /**
+     * Función que muestra la pantalla del seguimiento de la incidencia
+     */
     private function ver() {
         if(isset($_GET["incidencia"]))
         {
@@ -87,6 +108,9 @@ class IncidenciaController {
         }
     }
 
+    /**
+     * Función que inserta una incidencia en la base de datos
+     */
     private function insert() {
         $incidencia=new Incidencia($this->conexion);
         $incidencia->setDescripcionBreve($_POST["descripcionBreve"]);
@@ -109,6 +133,9 @@ class IncidenciaController {
         header("Location: index.php");
     }
 
+    /**
+     * Función que busca las incidencias filtradas por lo que quiera el usuario y muestra la pantalla de inicio con el listado de incidencias
+     */
     private function search() {
         if(isset($_POST["tipo"]))
         {
@@ -148,6 +175,9 @@ class IncidenciaController {
         }
     }
 
+    /**
+     * Función que cambia el estado de una incidencia a "Cerrada" en la base de datos
+     */
     private function cerrar() {
         if(isset($_POST["idIncidencia"])) {
             $incidencia=new Incidencia($this->conexion);
@@ -157,6 +187,9 @@ class IncidenciaController {
         }
     }
 
+    /**
+     * Función que cambia el técnico asignado de una incidencia en la base de datos
+     */
     private function updateTecnico() {
         $incidencia=new Incidencia($this->conexion);
         $incidencia->setIdIncidencia($_POST["idIncidencia"]);
@@ -172,11 +205,17 @@ class IncidenciaController {
         $incidencia->updateTecnico();
     }
 
+    /**
+     * Función que muestra la pantalla de las estadísticas
+     */
     private function estadisticas() {
 
         echo $this->twig->render('EstadisticasView.twig');
     }
 
+    /**
+     * Función que obtiene los datos para mostralos en las estadísticas
+     */
     private function getEstadisticas() {
         if(isset($_GET["tipo"])) {
             $incidencia = new Incidencia($this->conexion);
@@ -220,6 +259,10 @@ class IncidenciaController {
         }
     }
 
+    /**
+     * Función que muestra las incidencias en pantalla tras obtener el nombre y los apellidos de los clientes y empleados
+     * @param $incidencias
+     */
     private function mostrarIncidencias($incidencias) {
         for($i=0;$i<count($incidencias);$i++)
         {

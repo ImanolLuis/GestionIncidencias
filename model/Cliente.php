@@ -1,5 +1,13 @@
 <?php
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
 
+/**
+ * Class Cliente
+ */
 class Cliente {
     private $conexion;
     private $idCliente, $nombre, $apellidos, $empresa, $email, $telefono;
@@ -11,6 +19,10 @@ class Cliente {
     public function __construct($conexion) {
         $this->conexion = $conexion;
     }
+
+    /**
+     * Getters y setters de la clase Cliente
+     */
 
     /**
      * @return mixed
@@ -96,6 +108,10 @@ class Cliente {
         $this->telefono = $telefono;
     }
 
+    /**
+     * Selecciona un cliente de la base de datos por el idCliente
+     * @return array|null
+     */
     public function selectClienteById() {
         $datos=array("idCliente"=>$this->idCliente);
         try {
@@ -110,13 +126,18 @@ class Cliente {
         }
     }
 
+    /**
+     * Selecciona el nombre y los apellidos de un cliente de la base de datos
+     * @param $idCliente
+     * @return null|string
+     */
     public function selectNombreApellidosCliente($idCliente) {
         $datos=array("idCliente"=>$idCliente);
         try {
             $sentencia=$this->conexion->prepare("SELECT nombre, apellidos FROM Cliente WHERE idCliente=:idCliente");
             $sentencia->execute($datos);
-            while($fila=$sentencia->fetch())
-            {
+            $resultado="";
+            while($fila=$sentencia->fetch())  {
                 $resultado=$fila["nombre"]." ".$fila["apellidos"];
             }
             $this->conexion=null;
@@ -127,13 +148,16 @@ class Cliente {
         }
     }
 
+    /**
+     * Selecciona todos los cliente de la base de datos
+     * @return array|null
+     */
     public function selectAllCliente() {
         try {
             $sentencia=$this->conexion->prepare("SELECT * FROM Cliente");
             $sentencia->execute();
             $resultado=array();
-            while($fila=$sentencia->fetch())
-            {
+            while($fila=$sentencia->fetch()) {
                 $resultado[]=$fila;
             }
             $this->conexion=null;
@@ -144,6 +168,9 @@ class Cliente {
         }
     }
 
+    /**
+     * Actualiza todos los datos de un cliente de la base de datos por el idCliente
+     */
     public function update() {
         $datos=array("idCliente"=>$this->idCliente,"nombre"=>$this->nombre, "apellidos"=>$this->apellidos,"empresa"=>$this->empresa,"email"=>$this->email,"telefono"=>$this->telefono);
         try {

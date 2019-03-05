@@ -1,4 +1,15 @@
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
+
+/**
+ * Eventos de la página del seguimiento de la incidencia
+ */
+
 $(document).ready(function () {
+    // Actualizar cliente de la incidencia en la base de datos
     $("#actualizarCliente").submit(function (event) {
         event.preventDefault();
         if(validarCliente()) {
@@ -16,6 +27,7 @@ $(document).ready(function () {
             mostrarModal("danger", "Datos erróneos al actualizar el cliente");
         }
     });
+    // Actualizar técnico asignado de la incidencia en la base de datos
     $("#actualizarTecnico").submit(function (event) {
         event.preventDefault();
         let data=$("#actualizarTecnico").serialize();
@@ -29,6 +41,7 @@ $(document).ready(function () {
             mostrarModal("danger", "Problemas al actualizar el técnico asignado en el servidor.");
         });
     });
+    // Publicar anotación en la base de datos
     $("#publicarAnotacion").submit(function (event) {
         event.preventDefault();
         if(validarAnotacion()) {
@@ -46,12 +59,15 @@ $(document).ready(function () {
             mostrarModal("danger", "Datos erróneos al publicar la anotación");
         }
     });
+    // Cargar anotaciones al cargar la página
     cargarAnotaciones($("#idIncidencia"));
 
+    // Recargar anotaciones
     $("#refrescarAnotaciones").click(function() {
         cargarAnotaciones($("#idIncidencia"));
     });
 
+    // Actualizar estado de la incidencia cerrando la incidencia en la base de datos
     $("#cerrarIncidencia").click(function () {
         let incidencia=$("#idIncidencia");
         $.ajax({
@@ -66,6 +82,10 @@ $(document).ready(function () {
     });
 });
 
+/**
+ * Validar datos del cliente
+ * @return {boolean}
+ */
 function validarCliente() {
     if(!$("#nombreCliente").val().trim()||!$("#apellidosCliente").val().trim()||!$("#empresaCliente").val().trim()||!$("#emailCliente").val().trim()||!$("#telefonoCliente").val().trim()) {
         return false;
@@ -76,6 +96,10 @@ function validarCliente() {
     return true;
 }
 
+/**
+ * Validar datos de la anotación
+ * @return {boolean}
+ */
 function validarAnotacion() {
     if(!$("#anotacion").val().trim()) {
         return false;
@@ -86,6 +110,10 @@ function validarAnotacion() {
     return true;
 }
 
+/**
+ * Llamada al servidor para obtener las anotaciones de la incidencia
+ * @param incidencia
+ */
 function cargarAnotaciones(incidencia) {
     $.ajax({
         type : "POST",
@@ -94,11 +122,16 @@ function cargarAnotaciones(incidencia) {
         dataType : "JSON"
     }).done(function (anotaciones) {
         imprimirAnotaciones(anotaciones);
+        $("#anotacion").val("");
     }).fail(function () {
         mostrarModal("danger", "Problemas al cargar las anotaciones en el servidor.");
     });
 }
 
+/**
+ * Imprimir las anotaciones en pantalla
+ * @param anotaciones
+ */
 function imprimirAnotaciones(anotaciones) {
     let anotacionesDiv=$("#anotaciones");
 
@@ -123,6 +156,9 @@ function imprimirAnotaciones(anotaciones) {
     }
 }
 
+/**
+ * Efectos gráficos al cerrar incidencia
+ */
 function cerrarIncidencia() {
     $("#cerrarIncidencia").remove();
     let estado=$("#estado");
@@ -131,6 +167,11 @@ function cerrarIncidencia() {
     estado.addClass("w-100");
 }
 
+/**
+ * Mostrar mensaje al ususario
+ * @param tipo
+ * @param mensaje
+ */
 function mostrarModal(tipo, mensaje) {
     let alert=$('#modal .alert');
     switch(tipo) {

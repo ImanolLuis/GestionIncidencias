@@ -1,5 +1,13 @@
 <?php
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
 
+/**
+ * Class AnotacionController
+ */
 class AnotacionController {
     private $conectar, $conexion, $twig;
 
@@ -10,13 +18,15 @@ class AnotacionController {
         require_once __DIR__ . "/../core/Conectar.php";
         require_once __DIR__ . "/../model/Anotacion.php";
         require_once __DIR__ . "/../model/Empleado.php";
-        require_once __DIR__ . "/../vendor/autoload.php";
 
         $this->conectar = new Conectar();
         $this->conexion = $this->conectar->conexion();
-        $this->twig = new Twig_Environment(new Twig_Loader_Filesystem(__DIR__ . "/../view/"));
     }
 
+    /**
+     * Función que dependiendo de la acción que reciba ejecuta la función correpondiente
+     * @param string $accion
+     */
     public function run($accion = "") {
         switch ($accion) {
             case "insert":
@@ -27,6 +37,9 @@ class AnotacionController {
         }
     }
 
+    /**
+     * Función que selecciona todos las anotaciones de una incidencia en la base de datos
+     */
     private function selectAll() {
         if(isset($_POST["idIncidencia"])) {
             $anotacion=new Anotacion($this->conexion);
@@ -41,6 +54,9 @@ class AnotacionController {
         }
     }
 
+    /**
+     * Función que inserta una anotación en la base de datos
+     */
     private function insert() {
         if(isset($_POST["anotacion"])) {
             $anotacion=new Anotacion($this->conexion);

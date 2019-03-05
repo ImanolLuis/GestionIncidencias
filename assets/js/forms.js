@@ -1,3 +1,13 @@
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
+
+/**
+ * Código de la documentación de Bootstrap para formularios
+ */
+
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function() {
     'use strict';

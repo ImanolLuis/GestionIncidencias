@@ -1,5 +1,13 @@
 <?php
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
 
+/**
+ * Class Anotacion
+ */
 class Anotacion {
     private $conexion;
     private $idAnotacion, $anotacion, $fecha, $idIncidencia, $idEmpleado;
@@ -11,6 +19,10 @@ class Anotacion {
     public function __construct($conexion) {
         $this->conexion = $conexion;
     }
+
+    /**
+     * Getters y setters de la clase Anotación
+     */
 
     /**
      * @return mixed
@@ -84,6 +96,10 @@ class Anotacion {
         $this->idEmpleado = $idEmpleado;
     }
 
+    /**
+     * Selecciona todas las anotaciones de la base de datos por el idIncidencia
+     * @return array|null
+     */
     public function selectAllAnotacionByIncidencia() {
         $datos=array("idIncidencia"=>$this->idIncidencia);
         try {
@@ -101,6 +117,9 @@ class Anotacion {
         }
     }
 
+    /**
+     * Inserta una anotación en la base de datos
+     */
     public function insert() {
         $datos=array("anotacion"=>$this->anotacion,"idIncidencia"=>$this->idIncidencia, "idEmpleado"=>$this->idEmpleado);
         try {

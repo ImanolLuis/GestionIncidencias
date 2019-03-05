@@ -1,5 +1,13 @@
 <?php
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
 
+/**
+ * Class Empleado
+ */
 class Empleado {
     private $conexion;
     private $idEmpleado, $nombre, $apellidos, $usuario, $contrasenna, $esTecnico;
@@ -11,6 +19,10 @@ class Empleado {
     public function __construct($conexion) {
         $this->conexion = $conexion;
     }
+
+    /**
+     * Getters y setters de la clase Empleado
+     */
 
     /**
      * @return mixed
@@ -96,6 +108,10 @@ class Empleado {
         $this->esTecnico = $esTecnico;
     }
 
+    /**
+     * Valida el usuario en la base de datos al iniciar sesión
+     * @return array|null
+     */
     public function validarUsuario() {
         $datos=array("usuario"=>$this->usuario, "contrasenna"=>$this->contrasenna);
         try {
@@ -110,14 +126,18 @@ class Empleado {
         }
     }
 
+    /**
+     * Selecciona el nombre y los apellidos de un empleado de la base de datos
+     * @param $idEmpleado
+     * @return null|string
+     */
     public function selectNombreApellidosEmpleado($idEmpleado) {
         $datos=array("idEmpleado"=>$idEmpleado);
         try {
             $sentencia=$this->conexion->prepare("SELECT nombre, apellidos FROM Empleado WHERE idEmpleado=:idEmpleado");
             $sentencia->execute($datos);
             $resultado="";
-            while($fila=$sentencia->fetch())
-            {
+            while($fila=$sentencia->fetch()) {
                 $resultado=$fila["nombre"]." ".$fila["apellidos"];
             }
             $this->conexion=null;
@@ -128,13 +148,16 @@ class Empleado {
         }
     }
 
+    /**
+     * Selecciona todos los empleados técnicos de la base de datos
+     * @return array|null
+     */
     public function selectAllTecnico() {
         try {
             $sentencia=$this->conexion->prepare("SELECT * FROM Empleado WHERE esTecnico = 1");
             $sentencia->execute();
             $resultado=array();
-            while($fila=$sentencia->fetch())
-            {
+            while($fila=$sentencia->fetch()) {
                 $resultado[]=$fila;
             }
             $this->conexion=null;

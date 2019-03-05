@@ -1,3 +1,10 @@
+{#!
+# Gestión de Incidencias v1.0
+# Copyright 2019 Imanol Luis
+# Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+#}
+
+{# Página del seguimiento de la incidencia #}
 {% extends "layout.twig" %}
 
 {% block titulo %}
@@ -12,20 +19,20 @@
             <h4 class="border-bottom border-gray pb-2 mb-0">Informaci&oacute;n de la incidencia</h4>
             <div class="mt-4">
                 <div class="mb-3">
-                    <label for="descripcionBreve">Descripci&oacute;n breve</label>
+                    <label for="descripcionBreve"><b>Descripci&oacute;n breve</b></label>
                     <input type="text" class="form-control" id="descripcionBreve" readonly value="{{ incidencia.descripcionBreve }}" />
                 </div>
                 <div class="mb-3">
-                    <label for="descripcionDetallada">Descripci&oacute;n detallada</label>
+                    <label for="descripcionDetallada"><b>Descripci&oacute;n detallada</b></label>
                     <textarea class="form-control" id="descripcionDetallada" rows="5" readonly>{{ incidencia.descripcionDetallada }}</textarea>
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="fecha">Fecha</label>
+                        <label for="fecha"><b>Fecha</b></label>
                         <input type="text" class="form-control" id="fecha" readonly value="{{ incidencia.fecha|date("d M Y H:i", "Europe/Madrid") }}" />
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="estado">Estado de la incidencia</label>
+                        <label for="estado"><b>Estado de la incidencia</b></label>
                         <div class="form-inline">
                             <input type="text" class="form-control {% if incidencia.estado == 'Abierta' %}w-50{% else %}w-100{% endif %}" id="estado" readonly value="{{ incidencia.estado }}" />
                             {% if incidencia.estado == 'Abierta' %}
@@ -37,11 +44,11 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="prioridad">Prioridad de la incidencia</label>
+                        <label for="prioridad"><b>Prioridad de la incidencia</b></label>
                         <input type="text" class="form-control" id="prioridad" readonly value="{{ incidencia.prioridad }}" />
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="categoria">Categor&iacute;a</label>
+                        <label for="categoria"><b>Categor&iacute;a</b></label>
                         <input type="text" class="form-control" id="categoria" readonly value="{{ incidencia.categoria }}" />
                     </div>
                 </div>
@@ -51,23 +58,23 @@
                     <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del cliente</h4>
                     <form id="actualizarCliente" class="mt-4">
                         <div class="mb-3">
-                            <label for="nombreCliente">Nombre</label>
+                            <label for="nombreCliente"><b>Nombre</b></label>
                             <input type="text" class="form-control" id="nombreCliente" name="nombre" required placeholder="Nombre" value="{{ cliente.nombre }}" />
                         </div>
                         <div class="mb-3">
-                            <label for="apellidosCliente">Apellidos</label>
+                            <label for="apellidosCliente"><b>Apellidos</b></label>
                             <input type="text" class="form-control" id="apellidosCliente" name="apellidos" required placeholder="Apellidos" value="{{ cliente.apellidos }}" />
                         </div>
                         <div class="mb-3">
-                            <label for="empresaCliente">Empresa</label>
+                            <label for="empresaCliente"><b>Empresa</b></label>
                             <input type="text" class="form-control" id="empresaCliente" name="empresa" required placeholder="Empresa" value="{{ cliente.empresa }}" />
                         </div>
                         <div class="mb-3">
-                            <label for="emailCliente">Correo electr&oacute;nico</label>
+                            <label for="emailCliente"><b>Correo electr&oacute;nico</b></label>
                             <input type="email" class="form-control" id="emailCliente" name="email" required placeholder="Correo electr&oacute;nico" value="{{ cliente.email }}" />
                         </div>
                         <div class="mb-3">
-                            <label for="telefonoCliente">Tel&eacute;fono</label>
+                            <label for="telefonoCliente"><b>Tel&eacute;fono</b></label>
                             <input type="text" class="form-control" id="telefonoCliente" name="telefono" required placeholder="Tel&eacute;fono" value="{{ cliente.telefono }}" />
                         </div>
                         <input type="hidden" name="idCliente" value="{{ cliente.idCliente }}" />
@@ -78,7 +85,7 @@
                     <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del t&eacute;cnico</h4>
                     <form id="actualizarTecnico" class="mt-4">
                         <div class="mb-3">
-                            <label for="tecnico">T&eacute;cnico asignado</label>
+                            <label for="tecnico"><b>T&eacute;cnico asignado</b></label>
                             <select class="custom-select d-block w-100" id="tecnico" name="tecnico">
                                 <option value="">Sin asignar</option>
                                 {% for empleado in empleados %}

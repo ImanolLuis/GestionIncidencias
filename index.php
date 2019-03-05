@@ -1,5 +1,16 @@
 <?php
+/*!
+ * Gestión de Incidencias v1.0
+ * Copyright 2019 Imanol Luis
+ * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+ */
 
+/**
+ * FrontController
+ *
+ * Si entra por primera vez se muestra la pantalla de inicio de sesión.
+ * Si ha iniciado sesión o está iniciando sesión, lanza la acción correpondiente en el controlador ccorrepondiente.
+ */
 session_start();
 
 if(isset($_SESSION["login"])||isset($_POST["usuario"])) {
@@ -34,6 +45,10 @@ if(isset($_SESSION["login"])||isset($_POST["usuario"])) {
 
 }
 
+/**
+ * Función que recibe el controlador y lanza la acción correspondiente.
+ * @param $controllerObj
+ */
 function lanzarAccion($controllerObj) {
     if(isset($_GET["action"])) {
         $controllerObj->run($_GET["action"]);
