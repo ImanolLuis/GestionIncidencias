@@ -16,60 +16,24 @@ $(document).ready(function () {
     let empleadoStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=empleado", {}, "empleadoStat");
 
     // Al pulsar en los botones para filtrar
-    $("#prioridadCategoria").submit(function (event) {
+    $("#categoria").submit(function (event) {
         event.preventDefault();
-        let data=$("#prioridadCategoria").serialize();
+        let data=$("#categoria").serialize();
         resetCanvas("tipoIncidencia");
         tipoIncidenciaStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=categoria", data, "tipoIncidenciaStat");
     });
-    $("#estadoCategoria").submit(function (event) {
+    $("#cliente").submit(function (event) {
         event.preventDefault();
-        let data=$("#estadoCategoria").serialize();
-        resetCanvas("tipoIncidencia");
-        tipoIncidenciaStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=categoria", data, "tipoIncidenciaStat");
-    });
-    $("#fechaCategoria").submit(function (event) {
-        event.preventDefault();
-        let data=$("#fechaCategoria").serialize();
-        resetCanvas("tipoIncidencia");
-        tipoIncidenciaStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=categoria", data, "tipoIncidenciaStat");
-    });
-    $("#prioridadCliente").submit(function (event) {
-        event.preventDefault();
-        let data=$("#prioridadCliente").serialize();
+        let data=$("#cliente").serialize();
         resetCanvas("cliente");
         clienteStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=cliente", data, "clienteStat");
     });
-    $("#estadoCliente").submit(function (event) {
+    $("#empleado").submit(function (event) {
         event.preventDefault();
-        let data=$("#estadoCliente").serialize();
-        resetCanvas("cliente");
-        clienteStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=cliente", data, "clienteStat");
-    });
-    $("#fechaCliente").submit(function (event) {
-        event.preventDefault();
-        let data=$("#fechaCliente").serialize();
-        resetCanvas("cliente");
-        clienteStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=cliente", data, "clienteStat");
-    });
-    $("#prioridadEmpleado").submit(function (event) {
-        event.preventDefault();
-        let data=$("#prioridadEmpleado").serialize();
+        let data=$("#empleado").serialize();
         resetCanvas("empleado");
         empleadoStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=empleado", data, "empleadoStat");
-    });
-    $("#estadoEmpleado").submit(function (event) {
-        event.preventDefault();
-        let data=$("#estadoEmpleado").serialize();
-        resetCanvas("empleado");
-        empleadoStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=empleado", data, "empleadoStat");
-    });
-    $("#fechaEmpleado").submit(function (event) {
-        event.preventDefault();
-        let data=$("#fechaEmpleado").serialize();
-        resetCanvas("empleado");
-        empleadoStat=mostrarDiagrama("index.php?action=getEstadisticas&tipo=empleado", data, "empleadoStat");
-    });
+    });e
 });
 
 /**
@@ -86,7 +50,7 @@ function mostrarDiagrama(url, dataForm, canvas) {
         data: dataForm,
         dataType: "json"
     }).done(function (data) {
-        if(data!=null) {
+        if(data.length>0) {
             let etiquetas=[];
             let datos=[];
             let valorMaximo=0;

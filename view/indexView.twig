@@ -21,50 +21,32 @@
         <h3 class="mt-4 mb-3">Listado de incidencias con filtros</h3>
         <div class="my-3 p-3 bg-white shadow-lg">
             <h4 class="mb-3"><a data-toggle="collapse" href="#buscarIncidencias">B&uacute;queda de incidencias</a></h4>
-            <div id="buscarIncidencias" class="collapse multi-collapse row">
-                <form action="index.php?action=search" method="post" class="form-inline col-lg-4">
-                    <label class="sr-only" for="prioridad">Prioridad</label>
-                    <select class="custom-select w-50" id="prioridad" name="prioridad" required>
+            <div id="buscarIncidencias" class="collapse multi-collapse">
+                <form action="index.php?action=search" method="post" class="form-inline">
+                    <select class="custom-select col-12 col-md-4 col-xl" name="prioridad">
+                        <option value="">Todas las prioridades</option>
                         <option value="Alta">Prioridad alta</option>
                         <option value="Media">Prioridad media</option>
                         <option value="Baja">Prioridad baja</option>
                     </select>
-                    <input type="hidden" name="tipo" value="prioridad" />
-                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
-                </form>
-                <form action="index.php?action=search" method="post" class="form-inline col-lg-4 mt-2 mt-lg-0">
-                    <label class="sr-only" for="estado">Estado</label>
-                    <select class="custom-select w-50" id="estado" name="estado" required>
+                    <select class="custom-select col-12 col-md-4 col-xl" name="estado">
+                        <option value="">Todos los estados</option>
                         <option value="Abierta">Incidencia abierta</option>
                         <option value="Cerrada">Incidencia cerrada</option>
                     </select>
-                    <input type="hidden" name="tipo" value="estado" />
-                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
-                </form>
-                <form action="index.php?action=search" method="post" class="form-inline col-lg-4 mt-2 mt-lg-0">
-                    <label class="sr-only" for="categoria">Categor&iacute;a</label>
-                    <input type="text" class="form-control w-50" id="categoria" name="categoria" placeholder="Categor&iacute;a" required />
-                    <input type="hidden" name="tipo" value="categoria" />
-                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
-                </form>
-                <form action="index.php?action=search" method="post" class="form-inline col-lg-6 mt-2">
-                    <label class="sr-only" for="tecnico">T&eacute;cnico</label>
-                    <select class="custom-select w-50" id="tecnico" name="tecnico" required>
+                    <input type="text" class="form-control col-12 col-md-4 col-xl" name="categoria" placeholder="Categor&iacute;a" />
+                    <select class="custom-select col-12 col-md-4 col-xl" name="tecnico">
+                        <option value="">Todos las incidencias</option>
                         <option value="Yo">S&oacute;lo mis incidencias</option>
                         <option value="SinAsignar">Incidencias sin asignar</option>
                     </select>
-                    <input type="hidden" name="tipo" value="tecnico" />
-                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
-                </form>
-                <form action="index.php?action=search" method="post" class="form-inline col-lg-6 mt-2">
-                    <label class="sr-only" for="fecha">Fecha</label>
-                    <select class="custom-select w-50" id="fecha" name="fecha" required>
+                    <select class="custom-select col-12 col-md-4 col-xl" name="fecha">
+                        <option value="">Cualquier fecha</option>
                         <option value="ultimaSemana">Última semana</option>
                         <option value="ultimoMes">Último mes</option>
                         <option value="ultimoAnno">Último año</option>
                     </select>
-                    <input type="hidden" name="tipo" value="fecha" />
-                    <button type="submit" class="btn btn-primary ml-2"><i class="fas fa-filter"></i> Filtrar</button>
+                    <button type="submit" class="btn btn-primary col-12 col-md-4 col-xl"><i class="fas fa-filter"></i> Filtrar</button>
                 </form>
             </div>
         </div>

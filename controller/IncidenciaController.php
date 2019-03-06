@@ -112,65 +112,36 @@ class IncidenciaController {
      * Función que inserta una incidencia en la base de datos
      */
     private function insert() {
-        $incidencia=new Incidencia($this->conexion);
-        $incidencia->setDescripcionBreve($_POST["descripcionBreve"]);
-        $incidencia->setDescripcionDetallada($_POST["descripcionDetallada"]);
-        $incidencia->setPrioridad($_POST["prioridad"]);
-        $incidencia->setEstado("Abierta");
-        $incidencia->setCategoria($_POST["categoria"]);
-        $incidencia->setIdCliente($_POST["cliente"]);
-        if($_POST["tecnico"]=="")
-        {
-            $incidencia->setIdEmpleado(null);
-        }
-        else
-        {
-            $incidencia->setIdEmpleado($_POST["tecnico"]);
-        }
+        if(isset($_POST["descripcionBreve"])) {
+            $incidencia=new Incidencia($this->conexion);
+            $incidencia->setDescripcionBreve($_POST["descripcionBreve"]);
+            $incidencia->setDescripcionDetallada($_POST["descripcionDetallada"]);
+            $incidencia->setPrioridad($_POST["prioridad"]);
+            $incidencia->setEstado("Abierta");
+            $incidencia->setCategoria($_POST["categoria"]);
+            $incidencia->setIdCliente($_POST["cliente"]);
+            if($_POST["tecnico"]=="")
+            {
+                $incidencia->setIdEmpleado(null);
+            }
+            else
+            {
+                $incidencia->setIdEmpleado($_POST["tecnico"]);
+            }
 
-        $incidencia->insert();
+            $incidencia->insert();
 
-        header("Location: index.php");
+            header("Location: index.php");
+        }
     }
 
     /**
      * Función que busca las incidencias filtradas por lo que quiera el usuario y muestra la pantalla de inicio con el listado de incidencias
      */
     private function search() {
-        if(isset($_POST["tipo"]))
-        {
+        if(isset($_POST["prioridad"])) {
             $incidencia=new Incidencia($this->conexion);
-            switch($_POST["tipo"]) {
-                case "prioridad":
-                    $incidencias=$incidencia->selectIncidenciaByPrioridad($_POST["prioridad"]);
-                    break;
-                case "estado":
-                    $incidencias=$incidencia->selectIncidenciaByEstado($_POST["estado"]);
-                    break;
-                case "categoria":
-                    $incidencias=$incidencia->selectIncidenciaByCategoria($_POST["categoria"]);
-                    break;
-                case "tecnico":
-                    if($_POST["tecnico"]=="Yo") {
-                        $incidencias=$incidencia->selectIncidenciaByEmpleado($_SESSION["login"]["idEmpleado"], "Yo");
-                    } else {
-                        $incidencias=$incidencia->selectIncidenciaByEmpleado("", "SinAsignar");
-                    }
-                    break;
-                default:
-                    switch($_POST["fecha"]) {
-                        case "ultimaSemana":
-                            $incidencias=$incidencia->selectIncidenciaByFecha("ultimaSemana");
-                            break;
-                        case "ultimoMes":
-                            $incidencias=$incidencia->selectIncidenciaByFecha("ultimoMes");
-                            break;
-                        default:
-                            $incidencias=$incidencia->selectIncidenciaByFecha("");
-                            break;
-                    }
-                    break;
-            }
+            $incidencias=$incidencia->selectIncidenciaBySearch($this->validarDato("prioridad"),$this->validarDato("estado"),$this->validarDato("categoria"),$this->validarDato("tecnico"),$_SESSION["login"]["idEmpleado"],$this->validarDato("fecha"));
             $this->mostrarIncidencias($incidencias);
         }
     }
@@ -191,18 +162,20 @@ class IncidenciaController {
      * Función que cambia el técnico asignado de una incidencia en la base de datos
      */
     private function updateTecnico() {
-        $incidencia=new Incidencia($this->conexion);
-        $incidencia->setIdIncidencia($_POST["idIncidencia"]);
-        if($_POST["tecnico"]=="")
-        {
-            $incidencia->setIdEmpleado(null);
-        }
-        else
-        {
-            $incidencia->setIdEmpleado($_POST["tecnico"]);
-        }
+        if(isset($_POST["idIncidencia"])) {
+            $incidencia=new Incidencia($this->conexion);
+            $incidencia->setIdIncidencia($_POST["idIncidencia"]);
+            if($_POST["tecnico"]=="")
+            {
+                $incidencia->setIdEmpleado(null);
+            }
+            else
+            {
+                $incidencia->setIdEmpleado($_POST["tecnico"]);
+            }
 
-        $incidencia->updateTecnico();
+            $incidencia->updateTecnico();
+        }
     }
 
     /**
@@ -221,37 +194,13 @@ class IncidenciaController {
             $incidencia = new Incidencia($this->conexion);
             switch ($_GET["tipo"]) {
                 case "cliente":
-                    if(isset($_POST["prioridad"])) {
-                        $incidencias = $incidencia->selectIncidenciaByClienteStat("prioridad", $_POST["prioridad"]);
-                    } elseif(isset($_POST["estado"])) {
-                        $incidencias = $incidencia->selectIncidenciaByClienteStat("estado", $_POST["estado"]);
-                    } elseif(isset($_POST["fecha"])) {
-                        $incidencias = $incidencia->selectIncidenciaByClienteStat("fecha", $_POST["fecha"]);
-                    } else {
-                        $incidencias = $incidencia->selectIncidenciaByClienteStat("", "");
-                    }
+                    $incidencias = $incidencia->selectIncidenciaByClienteStat($this->validarDato("prioridad"),$this->validarDato("estado"),$this->validarDato("fecha"));
                     break;
                 case "empleado":
-                    if(isset($_POST["prioridad"])) {
-                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("prioridad", $_POST["prioridad"]);
-                    } elseif(isset($_POST["estado"])) {
-                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("estado", $_POST["estado"]);
-                    } elseif(isset($_POST["fecha"])) {
-                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("fecha", $_POST["fecha"]);
-                    } else {
-                        $incidencias = $incidencia->selectIncidenciaByEmpleadoStat("", "");
-                    }
+                    $incidencias = $incidencia->selectIncidenciaByEmpleadoStat($this->validarDato("prioridad"),$this->validarDato("estado"),$this->validarDato("fecha"));
                     break;
                 default:
-                    if(isset($_POST["prioridad"])) {
-                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("prioridad", $_POST["prioridad"]);
-                    } elseif(isset($_POST["estado"])) {
-                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("estado", $_POST["estado"]);
-                    } elseif(isset($_POST["fecha"])) {
-                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("fecha", $_POST["fecha"]);
-                    } else {
-                        $incidencias = $incidencia->selectIncidenciaByCategoriaStat("", "");
-                    }
+                    $incidencias = $incidencia->selectIncidenciaByCategoriaStat($this->validarDato("prioridad"),$this->validarDato("estado"),$this->validarDato("fecha"));
                     break;
             }
             header('Content-type: application/json');
@@ -264,8 +213,7 @@ class IncidenciaController {
      * @param $incidencias
      */
     private function mostrarIncidencias($incidencias) {
-        for($i=0;$i<count($incidencias);$i++)
-        {
+        for($i=0;$i<count($incidencias);$i++) {
             $cliente=new Cliente($this->conexion);
             $incidencias[$i]["cliente"]=$cliente->selectNombreApellidosCliente($incidencias[$i]["idCliente"]);
             $empleado=new Empleado($this->conexion);
@@ -273,5 +221,18 @@ class IncidenciaController {
         }
 
         echo $this->twig->render('indexView.twig', array("incidencias"=>$incidencias));
+    }
+
+    /**
+     * Función para validar que se ha enviado por POST un dato
+     * @param $dato
+     * @return string
+     */
+    private function validarDato($dato){
+        if(isset($_POST[$dato])) {
+            return $_POST[$dato];
+        } else {
+            return "";
+        }
     }
 }
