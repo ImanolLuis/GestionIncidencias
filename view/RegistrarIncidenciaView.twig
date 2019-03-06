@@ -1,0 +1,81 @@
+{#!
+# Gestión de Incidencias v1.0
+# Copyright 2019 Imanol Luis
+# Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+#}
+
+{# Página del registro de la incidencia #}
+{% extends "layout.twig" %}
+
+{% block titulo %}
+    Registrar incidencia
+{% endblock %}
+
+{% block cuerpo %}
+    {% include "navbar.twig" %}
+    <main role="main" class="container">
+        <h3 class="mt-4 mb-3">Registrar incidencia</h3>
+        <div class="my-3 p-3 bg-white shadow-lg">
+            <h4 class="border-bottom border-gray pb-2 mb-0">Informaci&oacute;n de la incidencia</h4>
+            <form action="index.php?action=insert" method="post" class="needs-validation mt-4" novalidate>
+                <div class="mb-3">
+                    <label for="descripcionBreve"><b>Descripci&oacute;n breve</b></label>
+                    <input type="text" class="form-control" id="descripcionBreve" name="descripcionBreve" placeholder="Descripci&oacute;n breve" required />
+                    <div class="invalid-feedback">
+                        La descripci&oacute;n breve es obligatoria.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="descripcionDetallada"><b>Descripci&oacute;n detallada</b></label>
+                    <textarea class="form-control" id="descripcionDetallada" name="descripcionDetallada" placeholder="Descripci&oacute;n detallada" rows="5"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="prioridad"><b>Prioridad de la incidencia</b></label>
+                        <select class="custom-select d-block w-100" id="prioridad" name="prioridad">
+                            <option value="Alta">Alta</option>
+                            <option value="Media" selected="selected">Media</option>
+                            <option value="Baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="categoria"><b>Categor&iacute;a</b></label>
+                        <input type="text" class="form-control" id="categoria" name="categoria" placeholder="Categor&iacute;a" required>
+                        <div class="invalid-feedback">
+                            La categor&iacute;a es obligatoria.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="cliente"><b>Cliente</b></label>
+                        <select class="custom-select d-block w-100" id="cliente" name="cliente" required>
+                            <option value="">Elige un cliente</option>
+                            {% for cliente in clientes %}
+                            <option value="{{ cliente.idCliente }}">{{ cliente.nombre }} {{ cliente.apellidos }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor, elige un cliente.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="tecnico"><b>T&eacute;cnico asignado</b></label>
+                        <select class="custom-select d-block w-100" id="tecnico" name="tecnico">
+                            <option value="">Sin asignar</option>
+                            {% for empleado in empleados %}
+                                <option value="{{ empleado.idEmpleado }}">{{ empleado.nombre }} {{ empleado.apellidos }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-md btn-block" type="submit">Registrar incidencia</button>
+            </form>
+        </div>
+    </main>
+    {% include "footer.twig" %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="assets/js/forms.js"></script>
+{% endblock %}

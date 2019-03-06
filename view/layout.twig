@@ -1,0 +1,26 @@
+{#!
+# Gestión de Incidencias v1.0
+# Copyright 2019 Imanol Luis
+# Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+#}
+
+{# Estructura general #}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>{% block titulo %}{% endblock %} &#124; INDUSTECH</title>
+    <link rel="stylesheet" href="assets/bootstrap-4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="assets/fontawesome-free-5.7.2/css/all.min.css" />
+    {% block estilos %}{% endblock %}
+</head>
+<body>
+    {% block cuerpo %}{% endblock %}
+
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

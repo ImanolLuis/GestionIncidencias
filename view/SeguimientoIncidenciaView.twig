@@ -1,0 +1,142 @@
+{#!
+# Gestión de Incidencias v1.0
+# Copyright 2019 Imanol Luis
+# Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+#}
+
+{# Página del seguimiento de la incidencia #}
+{% extends "layout.twig" %}
+
+{% block titulo %}
+    Seguimiento de la incidencia
+{% endblock %}
+
+{% block cuerpo %}
+    {% include "navbar.twig" %}
+    <main role="main" class="container">
+        <h3 class="mt-4 mb-3">Seguimiento de la incidencia</h3>
+        <div class="my-3 p-3 bg-white shadow-lg">
+            <h4 class="border-bottom border-gray pb-2 mb-0">Informaci&oacute;n de la incidencia</h4>
+            <div class="mt-4">
+                <div class="mb-3">
+                    <label for="descripcionBreve"><b>Descripci&oacute;n breve</b></label>
+                    <input type="text" class="form-control" id="descripcionBreve" readonly value="{{ incidencia.descripcionBreve }}" />
+                </div>
+                <div class="mb-3">
+                    <label for="descripcionDetallada"><b>Descripci&oacute;n detallada</b></label>
+                    <textarea class="form-control" id="descripcionDetallada" rows="5" readonly>{{ incidencia.descripcionDetallada }}</textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha"><b>Fecha</b></label>
+                        <input type="text" class="form-control" id="fecha" readonly value="{{ incidencia.fecha|date("d M Y H:i", "Europe/Madrid") }}" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="estado"><b>Estado de la incidencia</b></label>
+                        <div class="form-inline">
+                            <input type="text" class="form-control {% if incidencia.estado == 'Abierta' %}w-50{% else %}w-100{% endif %}" id="estado" readonly value="{{ incidencia.estado }}" />
+                            {% if incidencia.estado == 'Abierta' %}
+                            <button id="cerrarIncidencia" class="btn btn-primary ml-2" type="submit">Cerrar</button>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="prioridad"><b>Prioridad de la incidencia</b></label>
+                        <input type="text" class="form-control" id="prioridad" readonly value="{{ incidencia.prioridad }}" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="categoria"><b>Categor&iacute;a</b></label>
+                        <input type="text" class="form-control" id="categoria" readonly value="{{ incidencia.categoria }}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del cliente</h4>
+                    <form id="actualizarCliente" class="mt-4">
+                        <div class="mb-3">
+                            <label for="nombreCliente"><b>Nombre</b></label>
+                            <input type="text" class="form-control" id="nombreCliente" name="nombre" required placeholder="Nombre" value="{{ cliente.nombre }}" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellidosCliente"><b>Apellidos</b></label>
+                            <input type="text" class="form-control" id="apellidosCliente" name="apellidos" required placeholder="Apellidos" value="{{ cliente.apellidos }}" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="empresaCliente"><b>Empresa</b></label>
+                            <input type="text" class="form-control" id="empresaCliente" name="empresa" required placeholder="Empresa" value="{{ cliente.empresa }}" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailCliente"><b>Correo electr&oacute;nico</b></label>
+                            <input type="email" class="form-control" id="emailCliente" name="email" required placeholder="Correo electr&oacute;nico" value="{{ cliente.email }}" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefonoCliente"><b>Tel&eacute;fono</b></label>
+                            <input type="text" class="form-control" id="telefonoCliente" name="telefono" required placeholder="Tel&eacute;fono" value="{{ cliente.telefono }}" />
+                        </div>
+                        <input type="hidden" name="idCliente" value="{{ cliente.idCliente }}" />
+                        <button class="btn btn-primary btn-md btn-block" type="submit">Actualizar cliente</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h4 class="border-bottom border-gray pb-2 mb-0 mt-4">Informaci&oacute;n del t&eacute;cnico</h4>
+                    <form id="actualizarTecnico" class="mt-4">
+                        <div class="mb-3">
+                            <label for="tecnico"><b>T&eacute;cnico asignado</b></label>
+                            <select class="custom-select d-block w-100" id="tecnico" name="tecnico">
+                                <option value="">Sin asignar</option>
+                                {% for empleado in empleados %}
+                                    <option value="{{ empleado.idEmpleado }}" {% if empleado.idEmpleado == incidencia.idEmpleado %}selected="selected"{% endif %}>{{ empleado.nombre }} {{ empleado.apellidos }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="hidden" id="idIncidencia" name="idIncidencia" value="{{ incidencia.idIncidencia }}" />
+                        <button class="btn btn-primary btn-md btn-block" type="submit">Actualizar t&eacute;cnico asignado</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="border-bottom border-gray pb-2 my-4">Anotaciones</h4>
+                    <div id="anotaciones">
+                    </div>
+                    <button type="button" id="refrescarAnotaciones" class="btn btn-primary mt-2"><i class="fas fa-sync-alt"></i> Referescar</button>
+                </div>
+                {% if usuario.esTecnico == 1 %}
+                <div class="col-md-6">
+                    <h4 class="border-bottom border-gray pb-2 mt-4">Publicar anotaci&oacute;n</h4>
+                    <form id="publicarAnotacion">
+                        <textarea class="form-control" id="anotacion" name="anotacion" rows="5" placeholder="Publicar anotaci&oacute;n" required></textarea>
+                        <input type="hidden" name="idIncidencia" value="{{ incidencia.idIncidencia }}" />
+                        <input type="hidden" name="idEmpleado" value="{{ usuario.idEmpleado }}" />
+                        <button class="btn btn-primary btn-md btn-block mt-2" type="submit">Publicar anotaci&oacute;n</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert" role="alert">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% include "footer.twig" %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="assets/js/verIncidencia.js"></script>
+{% endblock %}
