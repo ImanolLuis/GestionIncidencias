@@ -1,0 +1,105 @@
+{#!
+# Gestión de Incidencias v1.0
+# Copyright 2019 Imanol Luis
+# Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
+#}
+
+{# Página de estadísticas #}
+{% extends "layout.twig" %}
+
+{% block titulo %}
+    Estad&iacute;sticas de las incidencias registradas en el sistema
+{% endblock %}
+
+{% block cuerpo %}
+    {% include "navbar.twig" %}
+    <main role="main" class="container">
+        <h3 class="mt-4 mb-3">Estad&iacute;sticas de las incidencias registradas en el sistema</h3>
+        <div class="my-3 p-3 bg-white shadow-lg">
+            <h4 class="border-bottom border-gray pb-2 mb-0">Estadísticas por tipo de incidencias</h4>
+            <div class="row p-3">
+                <form id="categoria" class="form-inline">
+                    <select class="custom-select" name="prioridad">
+                        <option value="">Todas las prioridades</option>
+                        <option value="Alta">Prioridad alta</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Prioridad baja</option>
+                    </select>
+                    <select class="custom-select ml-4" name="estado">
+                        <option value="">Todos los estados</option>
+                        <option value="Abierta">Incidencia abierta</option>
+                        <option value="Cerrada">Incidencia cerrada</option>
+                    </select>
+                    <select class="custom-select ml-4" name="fecha">
+                        <option value="">Cualquier fecha</option>
+                        <option value="ultimaSemana">Última semana</option>
+                        <option value="ultimoMes">Último mes</option>
+                        <option value="ultimoAnno">Último año</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-4 mt-md-0 ml-md-4"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+            </div>
+            <div id="tipoIncidenciaStatContainer" class="mt-4">
+                <canvas id="tipoIncidenciaStat" width="400" height="200"></canvas>
+            </div>
+            <h4 class="border-bottom border-gray pb-2 mb-0">Estadísticas por cliente</h4>
+            <div class="row p-3">
+                <form id="cliente" class="form-inline">
+                    <select class="custom-select" name="prioridad">
+                        <option value="">Todas las prioridades</option>
+                        <option value="Alta">Prioridad alta</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Prioridad baja</option>
+                    </select>
+                    <select class="custom-select ml-4" name="estado">
+                        <option value="">Todos los estados</option>
+                        <option value="Abierta">Incidencia abierta</option>
+                        <option value="Cerrada">Incidencia cerrada</option>
+                    </select>
+                    <select class="custom-select ml-4" name="fecha">
+                        <option value="">Cualquier fecha</option>
+                        <option value="ultimaSemana">Última semana</option>
+                        <option value="ultimoMes">Último mes</option>
+                        <option value="ultimoAnno">Último año</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-4 mt-md-0 ml-md-4"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+            </div>
+            <div id="clienteStatContainer" class="mt-4">
+                <canvas id="clienteStat" width="400" height="200"></canvas>
+            </div>
+            <h4 class="border-bottom border-gray pb-2 mb-0">Estadísticas por empleado</h4>
+            <div class="row p-3">
+                <form id="empleado" class="form-inline">
+                    <select class="custom-select" name="prioridad">
+                        <option value="">Todas las prioridades</option>
+                        <option value="Alta">Prioridad alta</option>
+                        <option value="Media">Prioridad media</option>
+                        <option value="Baja">Prioridad baja</option>
+                    </select>
+                    <select class="custom-select ml-4" name="estado">
+                        <option value="">Todos los estados</option>
+                        <option value="Abierta">Incidencia abierta</option>
+                        <option value="Cerrada">Incidencia cerrada</option>
+                    </select>
+                    <select class="custom-select ml-4" name="fecha">
+                        <option value="">Cualquier fecha</option>
+                        <option value="ultimaSemana">Última semana</option>
+                        <option value="ultimoMes">Último mes</option>
+                        <option value="ultimoAnno">Último año</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary mt-4 mt-md-0 ml-md-4"><i class="fas fa-filter"></i> Filtrar</button>
+                </form>
+            </div>
+            <div id="empleadoStatContainer" class="mt-4">
+                <canvas id="empleadoStat" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </main>
+    {% include "footer.twig" %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="assets/js/Chart.min.js"></script>
+    <script src="assets/js/estadisticas.js"></script>
+{% endblock %}
