@@ -1,5 +1,5 @@
 /*!
- * Gestión de Incidencias v1.0
+ * Gestión de Incidencias v1.0.1
  * Copyright 2019 Imanol Luis
  * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
  */
@@ -174,6 +174,7 @@ function cerrarIncidencia() {
  */
 function mostrarModal(tipo, mensaje) {
     let alert=$('#modal .alert');
+    alert.removeClass("alert-primary alert-secondary alert-success alert-danger alert-warning alert-info alert-light alert-dark");
     switch(tipo) {
         case "secondary":
             alert.addClass("alert-secondary");

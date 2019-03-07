@@ -1,6 +1,6 @@
 <?php
 /*!
- * Gestión de Incidencias v1.0
+ * Gestión de Incidencias v1.0.1
  * Copyright 2019 Imanol Luis
  * Licensed under MIT (https://github.com/ImanolLuis/GestionIncidencias/blob/master/LICENSE)
  */
